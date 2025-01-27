@@ -26,10 +26,12 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 ## 1. The home page
 
 - `frontend/src/app/home/page.tsx`
+- `http://localhost:3000/home`
 
 ## 2. The login page
 
 - `frontend/src/app/login/page.tsx`
+- `http://localhost:3000/page`
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
