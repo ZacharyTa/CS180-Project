@@ -2,7 +2,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+1.  Make sure you are in the frontend working directory: `cd src/frontend`
+2.  Install dependencies: `npm install`
+
+Next, run the development server:
 
 ```bash
 npm run dev
@@ -17,6 +20,16 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+# I made two example pages
+
+## 1. The home page
+
+- `frontend/src/app/home/page.tsx`
+
+## 2. The login page
+
+- `frontend/src/app/login/page.tsx`
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
