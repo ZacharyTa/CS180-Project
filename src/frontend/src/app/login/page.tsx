@@ -1,34 +1,63 @@
-import React from "react";
+"use client";
+import { useState } from "react";
+import { supabase } from "@lib/supabase";
+import { useRouter } from "next/navigation";
 
-const LoginPage: React.FC = () => (
-  <div className="flex items-center justify-center min-h-screen bg-base-200">
-    <div className="card w-96 p-4 bg-base-100 shadow-xl">
-      <h2 className="text-xl font-bold text-center">Login</h2>
-      <form className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="input input-bordered w-full"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="input input-bordered w-full"
-          required
-        />
-        <button type="submit" className="btn btn-primary w-full">
-          Login
-        </button>
-      </form>
-      <p className="text-center mt-4">
-        Dont have an account?{" "}
-        <a href="/register" className="link link-primary">
-          Register
-        </a>
-      </p>
+export default function Login() {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const router = useRouter();
+
+  // Sign in with email & password
+  const handleLogin = async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) console.error("Login error:", error.message);
+    else router.push("/home"); // Redirect after login
+  };
+
+  // Sign up with email & password
+  const handleSignUp = async () => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) console.error("Signup error:", error.message);
+    else alert("Check your email for a confirmation link!");
+  };
+
+  // Sign in with Google
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `http://localhost:3000/home`,
+      },
+    });
+    if (error) console.error("Google login error:", error.message);
+  };
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <input
+        type="email"
+        placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Enter your password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={handleLogin}>Sign In</button>
+      <button onClick={handleSignUp}>Sign Up</button>
+      <hr />
+      <button onClick={handleGoogleLogin}>Sign In with Google</button>
     </div>
-  </div>
-);
-
-export default LoginPage;
+  );
+}
