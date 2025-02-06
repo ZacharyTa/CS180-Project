@@ -6,7 +6,7 @@ const mynerve = Mynerve({
     weight: '400',
     subsets:['latin']});
 
-const HomePage: React.FC = () => (
+const HomePage: React.FC = () =>(
   
   <div className="min-h-screen bg-white">
     <div className="navbar bg-yellow-200">
