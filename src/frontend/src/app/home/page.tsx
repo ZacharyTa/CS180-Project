@@ -99,7 +99,5 @@ const HomePage: React.FC = () => (
       <Test title={"Baked Rice Custard"} imgUrl={"https://img.spoonacular.com/recipes/633758-556x370.jpg"} calories={"393"}protein={"8g"}carbs={"74g"}fats={"6g"}/>
       <Test title={"Murg Malai Tikka"} imgUrl={"https://img.spoonacular.com/recipes/652598-556x370.jpg"} calories={"375"}protein={"35g"}carbs={"6g"}fats={"23g"}/>
     </div>
-  </div>
-);
-
-export default HomePage;
+  );
+}
