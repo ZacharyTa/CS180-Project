@@ -24,7 +24,7 @@ export default function RecipeComponent({
     <div className="relative h-full w-full">
       <Image
         src={dummy_url}
-        alt={"recipe_name"}
+        alt={recipe_name}
         layout="fill"
         objectFit="cover"
       />

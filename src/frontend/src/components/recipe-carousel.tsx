@@ -15,7 +15,8 @@ export default function RecipeCarousel({
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: "y",
     loop: false,
-    dragFree: true,
+    dragFree: false,
+    containScroll: "trimSnaps", // Makes sure it aligns items properly
   });
   const [isLastSlide, setIsLastSlide] = useState(false);
 
