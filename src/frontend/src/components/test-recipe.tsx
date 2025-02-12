@@ -6,6 +6,16 @@ import Image from "next/image";
 //     weight: '400',
 //     subsets:['latin']});
 
+interface BoxProps {
+  title: string;
+  imgUrl: string;
+  cookingInstructions: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+}
+
 const Box = ({
   title,
   imgUrl,
@@ -14,7 +24,7 @@ const Box = ({
   protein,
   carbs,
   fats,
-}) => {
+}: BoxProps) => {
   return (
     <div className="card p-4 bg-yellow-200 shadow-xl float-left w-full h-full">
       <div>
