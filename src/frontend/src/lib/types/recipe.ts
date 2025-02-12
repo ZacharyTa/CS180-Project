@@ -1,9 +1,15 @@
+interface Allergen {
+  name: string;
+}
+
 export interface Recipe {
   id: number;
-  title: string;
-  imgUrl: string;
+  recipeName: string;
+  cookingInstructions: string;
+  imageURL: string;
   calories: number;
   protein: number;
-  carbs: number;
   fats: number;
+  carbs: number;
+  allergensList: Allergen[];
 }

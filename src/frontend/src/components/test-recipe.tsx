@@ -6,7 +6,15 @@ import Image from "next/image";
 //     weight: '400',
 //     subsets:['latin']});
 
-const Box = ({ title, imgUrl, calories, protein, carbs, fats }) => {
+const Box = ({
+  title,
+  imgUrl,
+  cookingInstructions,
+  calories,
+  protein,
+  carbs,
+  fats,
+}) => {
   return (
     <div className="card p-4 bg-yellow-200 shadow-xl float-left w-full h-full">
       <div>
@@ -17,6 +25,7 @@ const Box = ({ title, imgUrl, calories, protein, carbs, fats }) => {
           Calories: {calories} | Protein: {protein} | Carbs: {carbs} | Fats:{" "}
           {fats}
         </h2>
+        <p className="text-black">{cookingInstructions}</p>
       </div>
       <div className="flex justify-around space-x-1">
         <button className="btn btn-success w-10">Like</button>

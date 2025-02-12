@@ -15,12 +15,14 @@ export default function Home() {
     try {
       const newRecipes = (await fetchRecipes()).map((recipe) => ({
         id: recipe.id,
-        title: recipe.title,
-        imgUrl: recipe.imgUrl,
+        recipeName: recipe.recipeName,
+        imageURL: recipe.imageURL,
+        cookingInstructions: recipe.cookingInstructions,
         calories: recipe.calories,
         protein: recipe.protein,
         carbs: recipe.carbs,
         fats: recipe.fats,
+        allergensList: recipe.allergensList,
       }));
       setRecipes((prevRecipes: Recipe[]) => {
         const updatedRecipes = [...prevRecipes, ...newRecipes];
@@ -57,8 +59,9 @@ export default function Home() {
           // <RecipeComponent key={Recipe.id} src={Recipe.src} />
           <Box
             key={Recipe.id}
-            title={Recipe.title}
-            imgUrl={Recipe.imgUrl}
+            title={Recipe.recipeName}
+            imgUrl={Recipe.imageURL}
+            cookingInstructions={Recipe.cookingInstructions}
             calories={Recipe.calories}
             protein={Recipe.protein}
             carbs={Recipe.carbs}
