@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect } from "react";
 import RecipeCarousel from "@/components/recipe-carousel";
-import RecipeComponent from "@/components/recipe";
 import Box from "@/components/test-recipe";
 import { fetchRecipes } from "@/app/api";
 import { Recipe } from "@/lib/types/recipe";
@@ -56,7 +55,6 @@ export default function Home() {
     <main className="h-screen w-full bg-black">
       <RecipeCarousel onLastSlide={loadMoreRecipes}>
         {Recipes.map((Recipe) => (
-          // <RecipeComponent key={Recipe.id} src={Recipe.src} />
           <Box
             key={Recipe.id}
             title={Recipe.recipeName}
