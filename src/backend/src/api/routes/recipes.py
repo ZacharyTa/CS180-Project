@@ -1,64 +1,44 @@
-# Recipes fastapi router
+import json
+import random
 from fastapi import APIRouter
 from pydantic import BaseModel
-import random
+from typing import List
 
 router = APIRouter()
 
+# Define the response model
 class Recipe(BaseModel):
-    id: int
-    title: str
-    imgUrl: str
-    calories: int
-    protein: int
-    carbs: int
-    fats: int
+    Recipe_Name: str
+    Recipe_Cooking_Instructions: str
+    Recipe_Image_URL: str
+    Calories: float
+    Protein: float
+    Fats: float
+    Carbs: float
+    Allergens_list: List[str]
 
+# Load recipes from JSON file
+def load_recipes():
+    with open("merged_recipes.json", "r", encoding="utf-8") as file:
+        recipes = json.load(file)
+    return recipes
 
-# Example endpoint to fetch all recipes
-@router.get("/", response_model=list[Recipe])
-async def get_recipes():
+@router.get("/get_recipes", response_model=List[Recipe])
+async def get_random_recipes():
+    recipes = load_recipes()
+    recipe_names = list(recipes.keys())
+    random_recipes = random.sample(recipe_names, min(10, len(recipe_names)))
+    
     return [
         {
-            "id": random.randint(0, 100000),
-            "title": "Spaghetti and Meatballs",
-            "imgUrl": "https://www.simplyrecipes.com/thmb/Boo37yZBqeSpmELBIP_BBX_yVlU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Spaghetti-And-Meatballs-LEAD-3-40bdae68ea144751a8e0a4b0f972af2d.jpg",
-            "calories": random.randint(0, 1000),
-            "protein": random.randint(0, 100),
-            "carbs": random.randint(0, 100),
-            "fats": random.randint(0, 100)
-        },
-        {
-            "id": random.randint(0, 100000),
-            "title": "Noode tacos",
-            "imgUrl": "https://www.simplyrecipes.com/thmb/Boo37yZBqeSpmELBIP_BBX_yVlU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Spaghetti-And-Meatballs-LEAD-3-40bdae68ea144751a8e0a4b0f972af2d.jpg",
-            "calories": random.randint(0, 1000),
-            "protein": random.randint(0, 100),
-            "carbs": random.randint(0, 100),
-            "fats": random.randint(0, 100)
-        },
-        {
-            "id": random.randint(0, 100000),
-            "title": "vinegar",
-            "imgUrl": "https://www.simplyrecipes.com/thmb/Boo37yZBqeSpmELBIP_BBX_yVlU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Spaghetti-And-Meatballs-LEAD-3-40bdae68ea144751a8e0a4b0f972af2d.jpg",
-            "calories": random.randint(0, 1000),
-            "protein": random.randint(0, 100),
-            "carbs": random.randint(0, 100),
-            "fats": random.randint(0, 100)
-        },
-        {
-            "id": random.randint(0, 100000),
-            "title": "pizza",
-            "imgUrl": "https://www.simplyrecipes.com/thmb/Boo37yZBqeSpmELBIP_BBX_yVlU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Spaghetti-And-Meatballs-LEAD-3-40bdae68ea144751a8e0a4b0f972af2d.jpg",
-            "calories": random.randint(0, 1000),
-            "protein": random.randint(0, 100),
-            "carbs": random.randint(0, 100),
-            "fats": random.randint(0, 100)
+            "Recipe_Name": recipes[name]["Recipe Name"],
+            "Recipe_Cooking_Instructions": recipes[name]["Recipe Cooking Instructions"],
+            "Recipe_Image_URL": recipes[name]["Recipe Image URL"],
+            "Calories": recipes[name]["Calories"],
+            "Protein": recipes[name]["Protein"],
+            "Fats": recipes[name]["Fats"],
+            "Carbs": recipes[name]["Carbs"],
+            "Allergens_list": recipes[name]["Allergens list"],
         }
+        for name in random_recipes
     ]
-
-# env activate       Print the command to activate a virtual environment.
-#   env info           Displays information about the current environment.
-#   env list           Lists all virtualenvs associated with the current project.
-#   env remove         Remove virtual environments associated with the project.
-#   env use            Activates or creates a new virtualenv for the current project.
