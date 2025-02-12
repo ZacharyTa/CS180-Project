@@ -19,7 +19,7 @@ const Box = ({
     <div className="card p-4 bg-yellow-200 shadow-xl float-left w-full h-full">
       <div>
         {/* <p className=" text-center mb-4 text-blue-800">Title is: {title}</p> */}
-        <img src={imgUrl} width={500} height={500} alt={title} />
+        <Image src={imgUrl} width={500} height={500} alt={title} />
         <h1 className="text-xl text-center text-black font-bold"> {title}</h1>
         <h2 className="text-s text-center text-black">
           Calories: {calories} | Protein: {protein} | Carbs: {carbs} | Fats:{" "}
