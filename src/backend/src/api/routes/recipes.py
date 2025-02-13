@@ -8,10 +8,10 @@ router = APIRouter()
 
 # Define the response model
 class Recipe(BaseModel):
-    id: str
+    id: int
     recipeName: str
-    recipeCookingInstructions: str
-    recipeImageURL: str
+    cookingInstructions: str
+    imageURL: str
     calories: float
     protein: float
     fats: float
@@ -20,6 +20,7 @@ class Recipe(BaseModel):
 
 # Load recipes from JSON file
 def load_recipes():
+
     with open("merged_recipes.json", "r", encoding="utf-8") as file:
         recipes = json.load(file)
     return recipes
@@ -32,15 +33,15 @@ async def get_random_recipes():
     
     return [
         {
-            "Recipe_ID": recipes[name]["ID"],
-            "Recipe_Name": recipes[name]["Recipe Name"],
-            "Recipe_Cooking_Instructions": recipes[name]["Recipe Cooking Instructions"],
-            "Recipe_Image_URL": recipes[name]["Recipe Image URL"],
-            "Calories": recipes[name]["Calories"],
-            "Protein": recipes[name]["Protein"],
-            "Fats": recipes[name]["Fats"],
-            "Carbs": recipes[name]["Carbs"],
-            "Allergens_list": recipes[name]["Allergens list"],
+            "id": random.randint(0, 100000),
+            "recipeName": recipes[name]["Recipe Name"],
+            "cookingInstructions": recipes[name]["Recipe Cooking Instructions"],
+            "imageURL": recipes[name]["Recipe Image URL"],
+            "calories": recipes[name]["Calories"],
+            "protein": recipes[name]["Protein"],
+            "fats": recipes[name]["Fats"],
+            "carbs": recipes[name]["Carbs"],
+            "allergensList": recipes[name]["Allergens list"],
         }
         for name in random_recipes
     ]
