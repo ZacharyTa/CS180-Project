@@ -33,7 +33,7 @@ async def get_random_recipes():
     
     return [
         {
-            "id": recipes[name]["ID"],
+            "id": random.randint(0, 100000),
             "recipeName": recipes[name]["Recipe Name"],
             "cookingInstructions": recipes[name]["Recipe Cooking Instructions"],
             "imageURL": recipes[name]["Recipe Image URL"],
