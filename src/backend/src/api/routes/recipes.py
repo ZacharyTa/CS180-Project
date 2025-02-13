@@ -8,14 +8,15 @@ router = APIRouter()
 
 # Define the response model
 class Recipe(BaseModel):
-    Recipe_Name: str
-    Recipe_Cooking_Instructions: str
-    Recipe_Image_URL: str
-    Calories: float
-    Protein: float
-    Fats: float
-    Carbs: float
-    Allergens_list: List[str]
+    id: str
+    recipeName: str
+    recipeCookingInstructions: str
+    recipeImageURL: str
+    calories: float
+    protein: float
+    fats: float
+    carbs: float
+    allergensList: List[str]
 
 # Load recipes from JSON file
 def load_recipes():
@@ -31,6 +32,7 @@ async def get_random_recipes():
     
     return [
         {
+            "Recipe_ID": recipes[name]["ID"],
             "Recipe_Name": recipes[name]["Recipe Name"],
             "Recipe_Cooking_Instructions": recipes[name]["Recipe Cooking Instructions"],
             "Recipe_Image_URL": recipes[name]["Recipe Image URL"],
