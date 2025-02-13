@@ -12,13 +12,13 @@ RECIPE FORMAT:
 # Manages the information of individual recipes.
 class Recipe:
     # Initializer for recipe
-    def __init__(self, name, instructions, nutrition_facts, ingredients, diet, image):
+    def __init__(self, name, instructions, nutrition_facts, ingredients, diet, image_url):
         self._name = name
         self._instructions = instructions
         self._nutrition_facts = nutrition_facts
         self._ingredients = ingredients
         self._diet = diet
-        self._image = image
+        self._image_url = image_url
     
     def get_name(self):
         return self._name
@@ -35,5 +35,5 @@ class Recipe:
     def get_diet(self):
         return self._diet
     
-    def get_image(self):
-        return self._image
+    def get_image_url(self):
+        return self._image_url
