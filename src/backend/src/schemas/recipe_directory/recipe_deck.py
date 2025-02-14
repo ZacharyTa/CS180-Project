@@ -2,6 +2,7 @@ import random
 
 # This class is responsible for managing all the recipes in the deck
 class RecipeDeck:
+    # Initializes the Recipe Deck
     def __init__(self, initial_container=[]):
         self.__container = initial_container
 
@@ -33,4 +34,3 @@ class RecipeDeck:
     # Removes recipe at a particular index, if needed
     def remove_recipe_at_index(self, index):
         return self.__container.pop(index)
-    
