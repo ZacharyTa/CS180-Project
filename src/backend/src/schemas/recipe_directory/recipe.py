@@ -13,27 +13,27 @@ RECIPE FORMAT:
 class Recipe:
     # Initializer for recipe
     def __init__(self, name, instructions, nutrition_facts, ingredients, diet, image_url):
-        self._name = name
-        self._instructions = instructions
-        self._nutrition_facts = nutrition_facts
-        self._ingredients = ingredients
-        self._diet = diet
-        self._image_url = image_url
+        self.__name = name
+        self.__instructions = instructions
+        self.__nutrition_facts = nutrition_facts
+        self.__ingredients = ingredients
+        self.__diet = diet
+        self.__image_url = image_url
     
     def get_name(self):
-        return self._name
+        return self.__name
     
     def get_instructions(self):
-        return self._instructions
+        return self.__instructions
     
     def get_nutrition_facts(self):
-        return self._nutrition_facts
+        return self.__nutrition_facts
     
     def get_ingredients(self):
-        return self._ingredients
+        return self.__ingredients
     
     def get_diet(self):
-        return self._diet
+        return self.__diet
     
     def get_image_url(self):
-        return self._image_url
+        return self.__image_url
