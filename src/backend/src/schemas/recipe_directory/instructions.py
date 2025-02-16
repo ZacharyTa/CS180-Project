@@ -15,3 +15,9 @@ class Instructions:
             self.__list_of_instructions.remove(step_number - 1)
         except:
             print("Step does not exist!")
+    
+    def change_step(self, step_number, new_step):
+        if isinstance(new_step, str):
+            self[step_number - 1] = new_step
+        else:
+            raise ValueError("New step must be a string!")
