@@ -12,7 +12,10 @@ export default function Login() {
   // Sign in with email & password
   const handleLogin = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) alert(error.message);
     else router.push("/home");
     setLoading(false);
@@ -39,13 +42,17 @@ export default function Login() {
   };
 
   return (
-    <div 
+    <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center font-['Poppins']"
-      style={{ backgroundImage: "url('/AdobeStock_339164168.jpeg')" }} 
+      style={{ backgroundImage: "url('/assets/AdobeStock_339164168.jpeg')" }}
     >
       <div className="bg-white bg-opacity-10 backdrop-blur-md p-6 rounded-lg shadow-lg w-80 border border-white border-opacity-20">
-        <h2 className="text-2xl font-bold text-white text-center mb-2">Welcome Back!</h2>
-        <p className="text-gray-300 text-center font-bold mb-4">Sign in to continue</p>
+        <h2 className="text-2xl font-bold text-white text-center mb-2">
+          Welcome Back!
+        </h2>
+        <p className="text-gray-300 text-center font-bold mb-4">
+          Sign in to continue
+        </p>
 
         <div className="mb-3">
           <input
@@ -83,7 +90,7 @@ export default function Login() {
           {loading ? "Signing up..." : "Sign Up"}
         </button>
 
-        <p 
+        <p
           onClick={handleGoogleLogin}
           className="text-gray-300 text-sm text-center mt-3 cursor-pointer hover:text-white transition font-bold"
         >
