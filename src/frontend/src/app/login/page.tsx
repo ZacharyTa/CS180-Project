@@ -7,6 +7,7 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Sign in with email & password
   const handleLogin = async () => {
