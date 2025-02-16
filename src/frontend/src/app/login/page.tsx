@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   // Sign in with email & password
@@ -23,22 +22,23 @@ export default function Login() {
 
   // Sign up with email & password
   const handleSignUp = async () => {
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) alert(error.message);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) console.error("Signup error:", error.message);
     else alert("Check your email for a confirmation link!");
-    setLoading(false);
   };
 
   // Sign in with Google
   const handleGoogleLogin = async () => {
-    setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `http://localhost:3000/home` },
+      options: {
+        redirectTo: `http://localhost:3000/home`,
+      },
     });
-    if (error) alert(error.message);
-    setLoading(false);
+    if (error) console.error("Google login error:", error.message);
   };
 
   return (
