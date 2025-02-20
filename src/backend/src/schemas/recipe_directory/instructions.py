@@ -20,4 +20,4 @@ class Instructions:
         if isinstance(new_step, str):
             self.__list_of_instructions[step_number - 1] = new_step
         else:
-            raise ValueError("New step must be a string!")
+            raise Exception("New step must be a string!")
