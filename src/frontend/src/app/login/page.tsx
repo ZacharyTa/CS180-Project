@@ -16,9 +16,11 @@ export default function Login() {
       email,
       password,
     });
-    if (error) alert(error.message);
-    else router.push("/home");
-    setLoading(false);
+    if (error) console.error("Login error:", error.message);
+    else {
+        router.push("/fyp"); // Redirect after login
+        setLoading(false);
+    }
   };
 
   // Sign up with email & password
@@ -36,7 +38,7 @@ export default function Login() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `http://localhost:3000/home`,
+        redirectTo: `http://localhost:3000/fyp`,
       },
     });
     if (error) console.error("Google login error:", error.message);
