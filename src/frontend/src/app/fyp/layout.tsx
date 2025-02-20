@@ -1,30 +1,18 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@lib/supabase";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js";
+import { useAuth } from "@/context/authContext";
 
 export default function FYPLayout({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/login"); // Redirect if not logged in
-      } else {
-        setUser(user);
-      }
-    };
-    getUser();
-  }, [router]);
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
 
-  // Show loading state while checking auth
-  if (user === null) return <p>Loading...</p>;
-
+  if (loading) return <p>Loading...</p>;
   return <>{children}</>;
 }
