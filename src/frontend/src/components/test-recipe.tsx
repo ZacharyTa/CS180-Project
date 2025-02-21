@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import { likeRecipe, unlikeRecipe } from "@/app/api";
 // import {Mynerve} from "next/font/google"
 
 // const mynerve = Mynerve({
@@ -7,6 +8,7 @@ import Image from "next/image";
 //     subsets:['latin']});
 
 interface BoxProps {
+  id: number;
   title: string;
   imgUrl: string;
   cookingInstructions: string;
@@ -14,9 +16,11 @@ interface BoxProps {
   protein: number;
   carbs: number;
   fats: number;
+  userId: string;
 }
 
 const Box = ({
+  id,
   title,
   imgUrl,
   cookingInstructions,
@@ -24,7 +28,19 @@ const Box = ({
   protein,
   carbs,
   fats,
+  userId,
 }: BoxProps) => {
+  const [liked, setLiked] = useState(false);
+
+  const handleLikeClick = () => {
+    setLiked((prevLiked) => !prevLiked);
+    if (!liked) {
+      likeRecipe(userId, id);
+    } else {
+      unlikeRecipe(userId, id);
+    }
+  };
+
   return (
     <div className="card p-4 bg-yellow-200 shadow-xl float-left w-full h-full">
       <div>
@@ -37,27 +53,12 @@ const Box = ({
         </h2>
         <p className="text-black">{cookingInstructions}</p>
       </div>
-      <div className="flex justify-around space-x-1">
-        <button className="btn btn-success w-10">Like</button>
-        <button className="btn flex btn-error w-12 text-xxs">Dislike</button>
-        <button className="btn flex w-16 text-xxs gap-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="red"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-          Favorite
-        </button>
-      </div>
+      <button
+        className={`btn ${liked ? "btn-error" : "bg-transparent"} w-10`}
+        onClick={handleLikeClick}
+      >
+        Like
+      </button>
     </div>
   );
 };
