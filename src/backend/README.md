@@ -1,7 +1,7 @@
 # Dependencies to install
 
 1. Use python 3.13.1
-2. make virtual env 
+2. make virtual env
 3. First install poetry I think
    `pip3 install poetry`
 4. cd src/backend/
