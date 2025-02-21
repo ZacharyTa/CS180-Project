@@ -1,14 +1,15 @@
 import React from "react";
 import Test from "@components/Test";
+import { useRouter } from "next/navigation";
 import {Mynerve} from "next/font/google"
 
 const mynerve = Mynerve({
     weight: '400',
     subsets:['latin']});
 
-const HomePage: React.FC = () =>(
-  
-  <div className="min-h-screen bg-white">
+export default function Home() {
+  return (
+<div className="min-h-screen bg-white">
     <div className="navbar bg-yellow-200">
   <div className="navbar-start">
     <div className="dropdown">
@@ -36,7 +37,7 @@ const HomePage: React.FC = () =>(
     </div>
   </div>
   <div className="navbar-center">
-    <a className={`btn btn-ghost text-xl ${mynerve.className}`}>Munchies</a>
+    <a className={`btn btn-ghost text-xl ${mynerve.className} text-black `}>Dinders</a>
   </div>
   <div className="navbar-end">
     <button className="btn btn-ghost btn-circle">
@@ -72,32 +73,12 @@ const HomePage: React.FC = () =>(
     </button>
   </div>
 </div>
-    {/* <div className="text-center mt-4">
-     <h1 className={`text-black text-center text-7xl ${mynerve.className}`}>Munchies</h1>
-    </div> */}
-    
-    {/* <div className="card w-96 p-4 bg-base-100 shadow-xl">
-      <img
-        src="https://img.spoonacular.com/recipes/90629-312x231.jpg"
-        alt="Food"
-        className="rounded w-full mb-4"
-      />
-      <div className="text-center mb-4">
-        <h2 className="text-xl font-bold text-red-800">Baked Apples in White Wine</h2>
-        <p className="text-sm text-gray-600">
-          Calories: 250 | Protein: 10g | Carbs: 30g | Fat: 8g
-        </p>
-      </div>
-      <div className="flex justify-around">
-        <button className="btn btn-success">Like</button>
-        <button className="btn btn-error">Dislike</button>
-      </div>
-    </div> */}
     <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
-      <Test title={"Fresh Corn"} imgUrl={"https://img.spoonacular.com/recipes/643462-556x370.jpg"} calories={"30"}protein={"20g"}carbs={"5g"}fats={"2g"}/>
-      <Test title={"Cajun Lobster Pasta"} imgUrl={"https://img.spoonacular.com/recipes/636732-556x370.jpg"} calories={"734"}protein={"36g"}carbs={"39g"}fats={"50g"}/>
-      <Test title={"Baked Rice Custard"} imgUrl={"https://img.spoonacular.com/recipes/633758-556x370.jpg"} calories={"393"}protein={"8g"}carbs={"74g"}fats={"6g"}/>
-      <Test title={"Murg Malai Tikka"} imgUrl={"https://img.spoonacular.com/recipes/652598-556x370.jpg"} calories={"375"}protein={"35g"}carbs={"6g"}fats={"23g"}/>
+      <Test id={"634"} recipeName={"Fresh Corn"} imageUrl={"https://img.spoonacular.com/recipes/643462-556x370.jpg"} calories={"30"}protein={"20g"}carbs={"5g"}fats={"2g"} cookingInstructions={"Toss chicken with chayenne pepper sauce. Stir in remaining ingredients with blue cheese . Spoon into 1-1/2 quart shallow caserole, then sprinkle with bleu cheese "} allergensList={"Corn"} />
+      <Test id={""} recipeName={"Cajun Lobster Pasta"} imageUrl={"https://img.spoonacular.com/recipes/636732-556x370.jpg"} calories={"734"}protein={"36g"}carbs={"39g"}fats={"50g"} cookingInstructions={""} allergensList={""}/>
+      <Test id={""} recipeName={"Baked Rice Custard"} imageUrl={"https://img.spoonacular.com/recipes/633758-556x370.jpg"} calories={"393"}protein={"8g"}carbs={"74g"}fats={"6g"} cookingInstructions={""} allergensList={""}/>
+      <Test id={""} recipeName={"Murg Malai Tikka"} imageUrl={"https://img.spoonacular.com/recipes/652598-556x370.jpg"} calories={"375"}protein={"35g"}carbs={"6g"}fats={"23g"} cookingInstructions={""} allergensList={""}/>
+    </div>
     </div>
   );
 }
