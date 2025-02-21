@@ -2,16 +2,15 @@
 
 import Account from "@/components/Account";
 import { useAuth } from "@/context/authContext";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import RecipeCard from "@/components/recipe-card";
+import TabBar from "@/components/tab-bar";
 import { fetchRecipes } from "@/app/api";
 import { Recipe } from "@/lib/types/recipe";
 import Box from "@/components/test-recipe"; // Ensure this component is correctly implemented
 
 export default function ProfilePage() {
   const { user, session } = useAuth();
-  const router = useRouter();
   const [likedRecipes, setLikedRecipes] = useState<Recipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null); // State for modal
   const [modalOpen, setModalOpen] = useState(false); // Controls modal visibility
@@ -45,20 +44,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div
-        role="tablist"
-        className="tabs tabs-lifted fixed top-0 z-50 w-full bg-transparent"
-      >
-        <a role="tab" className="tab" onClick={() => router.push("/fyp")}>
-          For you
-        </a>
-        <a
-          role="tab"
-          className="tab tab-active [--tab-bg:transparent] [--tab-border-color:black] text-gray-500"
-        >
-          Profile
-        </a>
-      </div>
+      <TabBar />
 
       {/* Fixed header with profile */}
       <div className="flex items-center gap-4 p-4">
