@@ -1,4 +1,4 @@
-name: Run Tests on Push or PR to Main
+name: CI Pipeline
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run Jest Tests
+  ci:
+    name: Install, Lint, Build, and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -23,10 +23,18 @@ jobs:
           node-version: 20
           cache: "npm"
 
-      - name: Install Dependencies
-        working-directory: src/frontend
+      - name: Frontend:Install Dependencies
         run: npm install
+        working-directory: src/frontend
 
-      # - name: Run Jest Tests
-      #   working-directory: src/frontend
+      - name: Frontend:Run Linter
+        run: npm run lint
+        working-directory: src/frontend
+
+      - name: Frontend:Build the Project
+        run: npm run build
+        working-directory: src/frontend
+
+      # - name: Frontend:Run Jest Tests
       #   run: npm test -- --ci --coverage
+      #   working-directory: src/frontend
