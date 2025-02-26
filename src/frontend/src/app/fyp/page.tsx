@@ -8,7 +8,7 @@ import { fetchRecipes } from "@/app/api";
 import { Recipe } from "@/lib/types/recipe";
 import { useAuth } from "@/context/authContext";
 
-export default function Home() {
+export default function FYPPage() {
   const [Recipes, setRecipes] = useState<Recipe[]>([]);
   const { user } = useAuth();
 
