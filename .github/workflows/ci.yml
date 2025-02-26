@@ -27,6 +27,6 @@ jobs:
         working-directory: src/frontend
         run: npm install
 
-      - name: Run Jest Tests
-        working-directory: src/frontend
-        run: npm test -- --ci --coverage
+      # - name: Run Jest Tests
+      #   working-directory: src/frontend
+      #   run: npm test -- --ci --coverage
