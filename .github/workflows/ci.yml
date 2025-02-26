@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
-          cache-dependency-path: src/frontend/package-lock.json
+          cache-dependency-path: "src/frontend/package-lock.json"
 
       - name: Frontend:Install Dependencies
         run: npm install
