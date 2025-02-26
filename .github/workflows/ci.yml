@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  ci:
+  build:
     name: Install, Lint, Build, and Test
     runs-on: ubuntu-latest
 
@@ -21,11 +21,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
 
       - name: Frontend:Install Dependencies
         run: npm install
         working-directory: src/frontend
+
+      - name: Set Up Environment Variables
+        run: |
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
 
       - name: Frontend:Run Linter
         run: npm run lint
