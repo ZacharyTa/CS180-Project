@@ -1,0 +1,32 @@
+name: Run Tests on Push or PR to Main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Jest Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Dependencies
+        working-directory: src/frontend
+        run: npm install
+
+      - name: Run Jest Tests
+        working-directory: src/frontend
+        run: npm test -- --ci --coverage
