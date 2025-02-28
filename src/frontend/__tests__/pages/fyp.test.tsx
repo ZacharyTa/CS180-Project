@@ -96,7 +96,7 @@ describe("FYPPage Component", () => {
     });
 
     await waitFor(() => {
-      // Ensure that two Box components are rendered, based on the mockRecipes data
+      // assert that the two Box components are rendered, based on the mockRecipes data
       expect(screen.getAllByTestId("recipe-box")).toHaveLength(
         mockRecipes.length
       );
