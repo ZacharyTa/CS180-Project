@@ -60,18 +60,7 @@ export default function FYPPage() {
       <RecipeCarousel onLastSlide={loadMoreRecipes}>
         {user &&
           Recipes.map((Recipe) => (
-            <Box
-              key={Recipe.id}
-              id={Recipe.id}
-              title={Recipe.recipeName}
-              imgUrl={Recipe.imageURL}
-              cookingInstructions={Recipe.cookingInstructions}
-              calories={Recipe.calories}
-              protein={Recipe.protein}
-              carbs={Recipe.carbs}
-              fats={Recipe.fats}
-              userId={user?.id}
-            />
+            <Box key={Recipe.id} userId={user?.id} recipe={Recipe} />
           ))}
       </RecipeCarousel>
     </main>

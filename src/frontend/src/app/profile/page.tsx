@@ -81,17 +81,7 @@ export default function ProfilePage() {
               ✕
             </button>
             {/* Pass selected recipe to Box component */}
-            <Box
-              id={selectedRecipe.id}
-              title={selectedRecipe.recipeName}
-              imgUrl={selectedRecipe.imageURL}
-              cookingInstructions={selectedRecipe.cookingInstructions}
-              calories={selectedRecipe.calories}
-              protein={selectedRecipe.protein}
-              carbs={selectedRecipe.carbs}
-              fats={selectedRecipe.fats}
-              userId={user?.id}
-            />
+            <Box userId={user?.id} recipe={selectedRecipe} />
           </div>
           <div className="modal-backdrop" onClick={closeModal}></div>
         </dialog>
