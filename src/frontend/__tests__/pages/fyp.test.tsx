@@ -48,7 +48,7 @@ jest.mock("@/components/test-recipe", () => {
 describe("FYPPage Component", () => {
   const mockRecipes = [
     {
-      id: "1",
+      id: 1,
       recipeName: "Recipe 1",
       imageURL: "/recipe1.jpg",
       cookingInstructions: "Cook it well",
@@ -59,7 +59,7 @@ describe("FYPPage Component", () => {
       allergensList: [],
     },
     {
-      id: "2",
+      id: 2,
       recipeName: "Recipe 2",
       imageURL: "/recipe2.jpg",
       cookingInstructions: "Mix it up",
@@ -96,8 +96,10 @@ describe("FYPPage Component", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText("Recipe 1")).toBeInTheDocument();
-      expect(screen.getByText("Recipe 2")).toBeInTheDocument();
+      // Ensure that two Box components are rendered, based on the mockRecipes data
+      expect(screen.getAllByTestId("recipe-box")).toHaveLength(
+        mockRecipes.length
+      );
     });
   });
 

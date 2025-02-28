@@ -50,8 +50,8 @@ jest.mock("@/components/recipe-card", () => {
   return RecipeCardMock;
 });
 jest.mock("@/components/test-recipe", () => {
-  const TestRecipeMock = ({ title }: { title: string }) => (
-    <div data-testid="modal-recipe">{title}</div>
+  const TestRecipeMock = ({ recipe }: { recipe: { recipeName: string } }) => (
+    <div data-testid="modal-recipe">{recipe.recipeName}</div>
   );
   TestRecipeMock.displayName = "TestRecipeMock";
   return TestRecipeMock;

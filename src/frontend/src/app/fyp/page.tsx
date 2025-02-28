@@ -27,12 +27,20 @@ export default function FYPPage() {
         allergensList: recipe.allergensList,
       }));
       setRecipes((prevRecipes: Recipe[]) => {
-        const updatedRecipes = [...prevRecipes, ...newRecipes];
-        console.log("Updated Recipes length:", updatedRecipes);
-        // Keep only the last 20 Recipes
-        //return updatedRecipes.slice(-20) # key error here bc we manually create the recipe id
-        return updatedRecipes;
+        const uniqueRecipes = [...prevRecipes, ...newRecipes].reduce(
+          (acc, recipe) => {
+            if (!acc.some((r) => r.id === recipe.id)) {
+              acc.push(recipe);
+            }
+            return acc;
+          },
+          [] as Recipe[]
+        );
+
+        console.log("Updated Recipes length:", uniqueRecipes);
+        return uniqueRecipes;
       });
+
       return true;
     } catch (error) {
       console.error("Error loading more recipes:", error);
