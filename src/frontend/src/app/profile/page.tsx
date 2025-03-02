@@ -5,8 +5,9 @@ import { useAuth } from "@/context/authContext";
 import { useState, useEffect } from "react";
 import RecipeCard from "@/components/recipe-card";
 import TabBar from "@/components/tab-bar";
-import { fetchRecipes } from "@/app/api";
+import { fetchRecipes, setDietPreference, getDietPreference } from "@/app/api";
 import { Recipe } from "@/lib/types/recipe";
+import { DietPreference } from "@/lib/types/diet";
 import Box from "@/components/test-recipe";
 import DietaryForm from "@/components/diet-form";
 
@@ -16,6 +17,9 @@ export default function ProfilePage() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null); // State for modal
   const [boxModalOpen, setBoxModalOpen] = useState(false); // Controls modal visibility
   const [dietModalOpen, setDietModalOpen] = useState(false);
+  const [dietLoading, setDietLoading] = useState(false);
+  const [userDietPreference, setUserDietPreference] =
+    useState<DietPreference>();
 
   useEffect(() => {
     const fetchLikedRecipes = async () => {
@@ -40,7 +44,11 @@ export default function ProfilePage() {
     setSelectedRecipe(null);
   };
 
-  const openDietModal = () => {
+  const openDietModal = async () => {
+    if (user) {
+      setUserDietPreference(await getDietPreference(user.id));
+    }
+
     setDietModalOpen(true);
   };
 
@@ -48,11 +56,33 @@ export default function ProfilePage() {
     setDietModalOpen(false);
   };
 
-  const handleFormSubmit = (data: {
+  const handleFormSubmit = async ({
+    dietaryPreference,
+    allergies,
+  }: {
     dietaryPreference: string;
     allergies: string[];
   }) => {
-    console.log("User's selection:", data);
+    setDietLoading(true);
+    if (user === null) {
+      return;
+    }
+    try {
+      const dietPreferencePayload: DietPreference = {
+        userId: user.id,
+        dietaryPreference,
+        allergensList: allergies,
+      };
+
+      const response = await setDietPreference(dietPreferencePayload);
+      console.log("Response:", response);
+      // TODO add toast message to show response
+    } catch (error) {
+      console.error("Error fetching liked recipes:", error);
+    } finally {
+      setDietLoading(false);
+      closeDietModal();
+    }
   };
 
   if (user === null) {
@@ -63,7 +93,6 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-background">
       <TabBar />
 
-      {/* Fixed header with profile */}
       <div className="flex items-center gap-4 p-4">
         <Account session={session} />
         <div>
@@ -75,7 +104,6 @@ export default function ProfilePage() {
         My Diet
       </button>
 
-      {/* Scrollable content area with recipe grid */}
       <div className="pt-32 pb-6 px-1">
         <div className="grid grid-cols-3 gap-4">
           {user &&
@@ -84,13 +112,12 @@ export default function ProfilePage() {
                 key={recipe.id}
                 title={recipe.recipeName}
                 imgUrl={recipe.imageURL}
-                onClick={() => openBoxModal(recipe)} // Open modal on click
+                onClick={() => openBoxModal(recipe)}
               />
             ))}
         </div>
       </div>
 
-      {/* Diet Modal so that users can set diet preference */}
       {dietModalOpen && user && (
         <dialog id="diet-modal" className="modal modal-open">
           <div className="modal-box w-8/12 h-3/4">
@@ -101,16 +128,16 @@ export default function ProfilePage() {
               ✕
             </button>
             <DietaryForm
-              initialDietaryPreference="High Protein"
-              initialAllergies={["Dairy", "Gluten"]}
+              initialDietaryPreference={userDietPreference?.dietaryPreference}
+              initialAllergies={userDietPreference?.allergensList}
               onSubmit={handleFormSubmit}
+              loading={dietLoading}
             />
           </div>
           <div className="modal-backdrop" onClick={closeDietModal}></div>
         </dialog>
       )}
 
-      {/* DaisyUI Modal */}
       {boxModalOpen && selectedRecipe && (
         <dialog id="recipe-modal" className="modal modal-open">
           <div className="modal-box w-8/12 h-3/4">
@@ -120,7 +147,6 @@ export default function ProfilePage() {
             >
               ✕
             </button>
-            {/* Pass selected recipe to Box component */}
             <Box
               id={selectedRecipe.id}
               title={selectedRecipe.recipeName}

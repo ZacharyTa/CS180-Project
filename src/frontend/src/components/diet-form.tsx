@@ -3,12 +3,14 @@ import React, { useState } from "react";
 interface DietaryFormProps {
   initialDietaryPreference?: string;
   initialAllergies?: string[];
+  loading: boolean;
   onSubmit: (data: { dietaryPreference: string; allergies: string[] }) => void;
 }
 
 const DietaryForm: React.FC<DietaryFormProps> = ({
   initialDietaryPreference = "",
   initialAllergies = [],
+  loading,
   onSubmit,
 }) => {
   const [dietaryPreference, setDietaryPreference] = useState(
@@ -52,7 +54,6 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
     >
       <h2 className="text-xl font-semibold mb-4">Dietary Preferences</h2>
 
-      {/* Dietary Preferences (Radio Buttons) */}
       <div className="mb-4">
         <label className="font-medium">Select your dietary preference:</label>
         <div className="flex flex-col space-y-2 mt-2">
@@ -75,7 +76,6 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
         </div>
       </div>
 
-      {/* Allergies (Checkboxes) */}
       <div className="mb-4">
         <label className="font-medium">Do you have any allergies?</label>
         <div className="flex flex-col space-y-2 mt-2">
@@ -98,8 +98,8 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
         </div>
       </div>
 
-      {/* Submit Button */}
       <button type="submit" className="btn btn-primary w-full mt-4">
+        {loading && <span className="loading loading-spinner"></span>}
         Submit
       </button>
     </form>

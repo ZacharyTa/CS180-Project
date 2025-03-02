@@ -1,5 +1,5 @@
-// src/api.js
 import { Recipe } from "@/lib/types/recipe";
+import { DietPreference } from "@/lib/types/diet";
 
 // Fetch recipes from our own fastAPI api
 
@@ -70,5 +70,68 @@ export const unlikeRecipe = async (
   } catch (error) {
     console.error("Error unliking recipe:", error);
     return false;
+  }
+};
+
+export const setDietPreference = async (
+  data: DietPreference
+): Promise<boolean> => {
+  console.log("Setting Diet Preference", data);
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/v1/diet/set_preference/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to set diet preference");
+    }
+    return true;
+  } catch (error) {
+    console.error("Error setting diet preference:", error);
+    return false;
+  }
+};
+
+export const getDietPreference = async (
+  userId: string
+): Promise<DietPreference> => {
+  console.log("Getting Diet Preference", userId);
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:8000/api/v1/diet/get_preference/?userId=${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to set diet preference");
+    }
+
+    const responseData = await response.json();
+    const dietPreference: DietPreference = {
+      userId: responseData["user_id"],
+      dietaryPreference: responseData["diet_preference"],
+      allergensList: responseData["allergies"],
+    };
+    console.log("Diet Preference:", dietPreference);
+    return dietPreference;
+  } catch (error) {
+    console.error("Error setting diet preference:", error);
+
+    const dietPreferenceFallback: DietPreference = {
+      userId,
+      dietaryPreference: "",
+      allergensList: [],
+    };
+    return dietPreferenceFallback;
   }
 };
