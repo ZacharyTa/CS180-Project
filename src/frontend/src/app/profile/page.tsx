@@ -156,6 +156,7 @@ export default function ProfilePage() {
               protein={selectedRecipe.protein}
               carbs={selectedRecipe.carbs}
               fats={selectedRecipe.fats}
+              allergensList={selectedRecipe.allergensList}
               userId={user?.id}
             />
           </div>

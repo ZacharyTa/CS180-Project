@@ -70,6 +70,7 @@ export default function Home() {
               protein={Recipe.protein}
               carbs={Recipe.carbs}
               fats={Recipe.fats}
+              allergensList={Recipe.allergensList}
               userId={user?.id}
             />
           ))}

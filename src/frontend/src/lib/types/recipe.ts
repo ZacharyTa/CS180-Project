@@ -1,7 +1,3 @@
-interface Allergen {
-  name: string;
-}
-
 export interface Recipe {
   id: number;
   recipeName: string;
@@ -11,5 +7,5 @@ export interface Recipe {
   protein: number;
   fats: number;
   carbs: number;
-  allergensList: Allergen[];
+  allergensList: string[];
 }
