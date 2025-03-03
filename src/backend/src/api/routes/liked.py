@@ -14,10 +14,6 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 class Recipe(BaseModel):
     user_id: UUID4
     recipe_id: int
-    recipe_name: str
-    recipe_instructions: str
-    macros: dict  # {"calories": 200, "protein": 10, "fats": 5, "carbs": 30}
-    allergens: list[str]
 
 @app.post("/save_recipe")
 async def save_recipe(recipe: Recipe):
@@ -30,10 +26,6 @@ async def save_recipe(recipe: Recipe):
     response = supabase.table("recipes").insert({
         "user_id": str(recipe.user_id),
         "recipe_id": recipe.recipe_id,
-        "recipe_name": recipe.recipe_name,
-        "recipe_instructions": recipe.recipe_instructions,
-        "macros": recipe.macros,
-        "allergens": recipe.allergens
     }).execute()
 
     return {"message": "Recipe saved successfully", "status": "success"}
