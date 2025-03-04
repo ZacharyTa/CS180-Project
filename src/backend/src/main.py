@@ -1,6 +1,6 @@
 # FastAPI application entry point
 from fastapi import FastAPI
-from src.api.routes import recipes, user, diet
+from src.api.routes import recipes, user, diet, liked
 
 app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +18,7 @@ app.add_middleware(
 app.include_router(recipes.router, prefix="/api/v1/recipes", tags=["Recipes"])
 app.include_router(user.router, prefix="/api/v1/user", tags=["User"])
 app.include_router(diet.router, prefix="/api/v1/diet", tags=["Diet"])
+app.include_router(diet.router, prefix="/api/vi/liked", tags=["Liked"])
 
 @app.get("/")
 def read_root():

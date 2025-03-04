@@ -3,6 +3,8 @@ import random
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 from typing import List
+import os
+
 
 router = APIRouter()
 
@@ -18,12 +20,10 @@ class Recipe(BaseModel):
     carbs: float
     allergensList: List[str]
 
-# Load recipes from JSON file
-def load_recipes():
 
+def load_recipes():
     with open("merged_recipes.json", "r", encoding="utf-8") as file:
-        recipes = json.load(file)
-    return recipes
+        return json.load(file)
 
 @router.get("/get_recipes", response_model=List[Recipe])
 async def get_random_recipes():
