@@ -44,11 +44,11 @@ const Box = ({
         <Image src={imgUrl} width={500} height={500} alt={title} />
         <h1 className="text-xl text-center text-black font-bold"> {title}</h1>
         <h2 className="text-s text-center text-black">
-          Calories: {calories} | Protein: {protein} | Carbs: {carbs} | Fats:{" "}
+          Calories: {calories} | Protein: {protein} | Carbs: {carbs} | Fats:
           {fats}
         </h2>
         <h3 className="text-lg text-center text-black font-bold">Allergens:</h3>
-        <p className="font-bold text-red-500">{allergensList.join(", ")}</p>
+        <p className="font-bold text-red-500">{allergensList?.join(", ")}</p>
         <p className="text-black text-sm">{cookingInstructions}</p>
       </div>
       <button

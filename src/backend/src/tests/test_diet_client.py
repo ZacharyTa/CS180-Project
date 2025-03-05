@@ -56,4 +56,4 @@ async def test_set_user_diet_preference():
         assert result.diet_preference == "High Protein"
         assert result.allergies == ["Meat, Dairy"]
 
-# TODO: Add more tests for setting/getting no user diet preference
+# TODO: Add more tests for setting/ no user diet preference

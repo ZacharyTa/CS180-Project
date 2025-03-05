@@ -34,6 +34,10 @@ export default function ProfilePage() {
     fetchLikedRecipes();
   }, []);
 
+  useEffect(() => {
+    console.log("likedRecipes:", likedRecipes);
+  }, [likedRecipes]);
+
   const openBoxModal = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
     setBoxModalOpen(true);
