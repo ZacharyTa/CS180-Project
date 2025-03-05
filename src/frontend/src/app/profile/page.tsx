@@ -5,7 +5,11 @@ import { useAuth } from "@/context/authContext";
 import { useState, useEffect } from "react";
 import RecipeCard from "@/components/recipe-card";
 import TabBar from "@/components/tab-bar";
-import { fetchRecipes, setDietPreference, getDietPreference } from "@/app/api";
+import {
+  getLikedRecipes,
+  setDietPreference,
+  getDietPreference,
+} from "@/app/api";
 import { Recipe } from "@/lib/types/recipe";
 import { DietPreference } from "@/lib/types/diet";
 import Box from "@/components/test-recipe";
@@ -22,9 +26,12 @@ export default function ProfilePage() {
     useState<DietPreference>();
 
   useEffect(() => {
+    if (user === null) {
+      return;
+    }
     const fetchLikedRecipes = async () => {
       try {
-        const recipes = await fetchRecipes(); // Fetch liked recipes
+        const recipes = await getLikedRecipes(user.id); // Fetch liked recipes
         setLikedRecipes(recipes);
       } catch (error) {
         console.error("Error fetching liked recipes:", error);
@@ -33,10 +40,6 @@ export default function ProfilePage() {
 
     fetchLikedRecipes();
   }, []);
-
-  useEffect(() => {
-    console.log("likedRecipes:", likedRecipes);
-  }, [likedRecipes]);
 
   const openBoxModal = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
@@ -162,6 +165,7 @@ export default function ProfilePage() {
               fats={selectedRecipe.fats}
               allergensList={selectedRecipe.allergensList}
               userId={user?.id}
+              isProfile={true}
             />
           </div>
           <div className="modal-backdrop" onClick={closeBoxModal}></div>

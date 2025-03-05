@@ -60,7 +60,7 @@ export default function Home() {
     const fetchInitialRecipes = async () => {
       console.log("Fetching initial recipes");
       try {
-        const initialRecipes = await fetchRecipes([]);
+        const initialRecipes = await fetchRecipes(currentRecipeIds);
         setRecipes(initialRecipes);
         const initialRecipeIds = initialRecipes.map((recipe) => recipe.id);
         setCurrentRecipeIds((prevIds) => {
@@ -94,6 +94,7 @@ export default function Home() {
               fats={Recipe.fats}
               allergensList={Recipe.allergensList}
               userId={user?.id}
+              isProfile={false}
             />
           ))}
       </RecipeCarousel>

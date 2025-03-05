@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 from src.schemas.recipe import Recipe
 from src.db.recipe_client import RecipeClient
@@ -12,9 +12,9 @@ class FetchRecipeBatchRequest(BaseModel):
 @router.post("/get_recipes", response_model=list[dict[str, Any]]) # find out how todo: list[Recipe.to_dict()]
 async def get_random_recipes(request: FetchRecipeBatchRequest):
     
-    recipe_client = RecipeClient()
-    recipes = await recipe_client.get_recipe(request.recipe_id_list)
-    response = [recipe.to_dict() for recipe in recipes]
+    recipe_client = RecipeClient(user_id=1) # aghh hardcode for now
+    recipe_list = await recipe_client.get_recipe(request.recipe_id_list)
+    response = [recipe.to_dict() for recipe in recipe_list]
     return response
 
 class LikeRecipeRequest(BaseModel):
@@ -23,8 +23,10 @@ class LikeRecipeRequest(BaseModel):
 
 @router.post("/like_recipe", response_model=bool)
 async def like_recipe(request: LikeRecipeRequest):
-    print(f"user_id: {request.user_id} -> liked recipe with id {request.recipe_id}!")
-    return True # return true if theres no errors
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.like_recipe(request.recipe_id)
+    return response
 
 class UnlikeRecipeRequest(BaseModel):
     user_id: str = Field(..., alias="userId")
@@ -32,5 +34,26 @@ class UnlikeRecipeRequest(BaseModel):
 
 @router.post("/unlike_recipe", response_model=bool)
 async def dislike_recipe(request: UnlikeRecipeRequest):
-    print(f"user_id: {request.user_id} -> unliked recipe with id {request.recipe_id}!")
-    return True
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.unlike_recipe(request.recipe_id)
+    return response
+
+
+@router.get("/get_liked_recipes", response_model=list[dict[str, Any]])
+async def get_likes(user_id: str = Query(..., alias="userId")):# -> list[dict[str, Any]]:
+    try:
+        recipe_client = RecipeClient(user_id=user_id)
+        recipe_list = await recipe_client.get_likes()
+
+        # print recipe list ids
+        for recipe in recipe_list:
+            print(recipe.id)
+
+        if recipe_list is None:
+            raise HTTPException(status_code=404, detail="No liked recipes found")
+        
+        response = [recipe.to_dict() for recipe in recipe_list]
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

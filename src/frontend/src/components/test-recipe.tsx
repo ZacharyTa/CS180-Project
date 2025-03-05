@@ -13,6 +13,7 @@ interface BoxProps {
   fats: number;
   allergensList: string[];
   userId: string;
+  isProfile: boolean;
 }
 
 const Box = ({
@@ -26,8 +27,9 @@ const Box = ({
   fats,
   allergensList,
   userId,
+  isProfile,
 }: BoxProps) => {
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(isProfile);
 
   const handleLikeClick = () => {
     setLiked((prevLiked) => !prevLiked);
@@ -39,7 +41,11 @@ const Box = ({
   };
 
   return (
-    <div className="card p-4 bg-yellow-200 shadow-xl w-full h-auto">
+    <div
+      className={`card p-4 bg-yellow-200 shadow-xl w-full ${
+        isProfile ? "h-auto" : "h-full"
+      }`}
+    >
       <div>
         <Image src={imgUrl} width={500} height={500} alt={title} />
         <h1 className="text-xl text-center text-black font-bold"> {title}</h1>

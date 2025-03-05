@@ -28,6 +28,30 @@ export const fetchRecipes = async (recipeList: number[]): Promise<Recipe[]> => {
   }
 };
 
+export const getLikedRecipes = async (userId: string): Promise<Recipe[]> => {
+  console.log("Fetching liked recipes");
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:8000/api/v1/recipes/get_liked_recipes/?userId=${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch liked recipes");
+    }
+    const data: Recipe[] = await response.json();
+    console.log("Response data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching liked recipes:", error);
+    return [];
+  }
+};
+
 export const likeRecipe = async (
   userId: string,
   recipeId: number
