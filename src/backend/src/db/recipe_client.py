@@ -16,7 +16,7 @@ class RecipeClient:
         self.supabase: Client = create_client(supabase_url=os.environ.get("NEXT_PUBLIC_SUPABASE_URL"), supabase_key=os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY"))
         self.user_id = user_id
 
-    def _to_numpy(embedding):
+    def _to_numpy(self, embedding):
         if not embedding:
             return None
         if isinstance(embedding, str):
