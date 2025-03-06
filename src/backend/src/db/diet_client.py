@@ -11,13 +11,13 @@ class DietPreferenceClient:
 
     Methods
     -------
-    __init__():
+    __init__(user_id: str):
         Initializes the DietPreferenceClient with a Supabase client instance.
-
-    async get_user_diet_preference(user_id: str) -> DietPreference:
-        Retrieves the diet preference for a given user ID from the Supabase database.
         Parameters:
-            user_id (str): The ID of the user whose diet preference is to be retrieved.
+            user_id (str): The ID of the user whose diet preference is to be handled.
+
+    async get_user_diet_preference() -> DietPreference:
+        Retrieves the diet preference for a given user ID from the Supabase database.
         Returns:
             DietPreference: An instance of DietPreference containing the user's diet preference data.
 
@@ -28,16 +28,17 @@ class DietPreferenceClient:
         Returns:
             DietPreference: An instance of DietPreference containing the updated user's diet preference data.
     """
-    def __init__(self):
+    def __init__(self, user_id: str):
         self.supabase: Client = create_client(supabase_url=os.environ.get("NEXT_PUBLIC_SUPABASE_URL"), supabase_key=os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY"))
+        self.user_id = user_id
 
-    async def get_user_diet_preference(self, user_id: str):
+    async def get_user_diet_preference(self):
         user_diet_preference = None
 
         response = (
             self.supabase.table("diet_preference")
             .select("user_id, diet_preference, allergies")
-            .eq("user_id", user_id)
+            .eq("user_id", self.user_id)
             .execute()
         )
 
@@ -48,7 +49,28 @@ class DietPreferenceClient:
                 allergies=response.data[0]["allergies"]
             )
 
-        return user_diet_preference
+            return user_diet_preference
+
+        new_entry = {
+            "user_id": self.user_id,
+            "diet_preference": None,
+            "allergies": [] 
+        }
+
+        insert_response = (
+            self.supabase.table("diet_preference")
+            .insert(new_entry)
+            .execute()
+        )
+
+        if insert_response.data:
+            return DietPreference(
+                user_id=insert_response.data[0]["user_id"],
+                diet_preference=insert_response.data[0]["diet_preference"],
+                allergies=insert_response.data[0]["allergies"]
+            )
+
+        return None
 
     async def set_user_diet_preference(self, payload: DietPreference):
         user_diet_preference = None

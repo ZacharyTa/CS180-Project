@@ -3,7 +3,10 @@ import { DietPreference } from "@/lib/types/diet";
 
 // Fetch recipes from our own fastAPI api
 
-export const fetchRecipes = async (recipeList: number[]): Promise<Recipe[]> => {
+export const fetchRecipes = async (
+  userId: string,
+  recipeList: number[]
+): Promise<Recipe[]> => {
   console.log("Fetching recipeList", recipeList);
   try {
     const response = await fetch(
@@ -13,7 +16,7 @@ export const fetchRecipes = async (recipeList: number[]): Promise<Recipe[]> => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipeList }),
+        body: JSON.stringify({ userId, recipeList }),
       }
     );
     if (!response.ok) {

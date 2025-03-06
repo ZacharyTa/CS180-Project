@@ -2,6 +2,7 @@ import os
 import dotenv
 from supabase import create_client, Client
 from src.schemas.recipe import Recipe
+from src.schemas.diet import DietPreference
 
 from postgrest.base_request_builder import APIResponse
 
@@ -13,16 +14,39 @@ class RecipeClient:
         self.supabase: Client = create_client(supabase_url=os.environ.get("NEXT_PUBLIC_SUPABASE_URL"), supabase_key=os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY"))
         self.user_id = user_id
 
-    async def get_recipe(self, recipe_id_list: list[int]) -> list[Recipe]:
-        recipe_batch: list[Recipe] = []
+    def _get_sort_preference(self, diet_preference: str) -> tuple[str, bool]:
+        preference_map = {
+            "High Protein": ("proteins", True),
+            "Low Carb": ("carbs", False),
+            "Low Fat": ("fats", False),
+            "Keto": ("carbs", False),
+            "Low Calories": ("calories", False),
+        }
+        
+        return preference_map.get(diet_preference, (None, False)) 
 
-        response = (
+
+    async def get_recipe(self, recipe_id_list: list[int], diet_pref: DietPreference | None) -> list[Recipe]:
+        recipe_batch: list[Recipe] = []
+        response = APIResponse(data=[])
+
+        query = (
             self.supabase.table("recipe")
             .select("*")
             .not_.in_("id", recipe_id_list)
-            .limit(10)
-            .execute()
         )
+
+        if diet_pref:
+            query = query.or_(
+                f"allergens_list.is.null, allergens_list.not.ov.{{{','.join(diet_pref.allergies)}}}"
+            )
+
+
+            sort_column, sort_order = self._get_sort_preference(diet_pref.diet_preference)
+            if sort_column:
+                query = query.order(sort_column, desc=sort_order)  # Sort dynamically
+
+        response = query.limit(10).execute()
 
         if len(response.data) > 0:
             for recipe in response.data:
@@ -39,6 +63,7 @@ class RecipeClient:
                 ))
 
         return recipe_batch
+
     
     async def like_recipe(self, recipe_id: int) -> bool:
 

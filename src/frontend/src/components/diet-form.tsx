@@ -29,9 +29,9 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
     "Dairy",
     "Peanuts",
     "Gluten",
-    "Soy",
+    "Meat",
     "Shellfish",
-    "Eggs",
+    "Egg",
   ];
 
   const handleCheckboxChange = (allergy: string) => {

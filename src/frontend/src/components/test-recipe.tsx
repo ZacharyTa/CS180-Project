@@ -54,7 +54,9 @@ const Box = ({
           {fats}
         </h2>
         <h3 className="text-lg text-center text-black font-bold">Allergens:</h3>
-        <p className="font-bold text-red-500">{allergensList?.join(", ")}</p>
+        <p className="font-bold text-red-500 text-center">
+          {allergensList?.join(", ")}
+        </p>
         <p className="text-black text-sm">{cookingInstructions}</p>
       </div>
       <button

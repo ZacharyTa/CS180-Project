@@ -82,7 +82,7 @@ export default function ProfilePage() {
       };
 
       const response = await setDietPreference(dietPreferencePayload);
-      console.log("Response:", response);
+      console.log("setting diet pref:", response);
       // TODO add toast message to show response
     } catch (error) {
       console.error("Error fetching liked recipes:", error);

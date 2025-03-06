@@ -19,9 +19,12 @@ export default function Home() {
 
   const loadMoreRecipes = useCallback(async () => {
     console.log("Loading more recipes");
+    if (!user) {
+      return false;
+    }
     try {
       console.log("Current Recipe Ids:", currentRecipeIds);
-      const newRecipes = (await fetchRecipes(currentRecipeIds)).map(
+      const newRecipes = (await fetchRecipes(user.id, currentRecipeIds)).map(
         (recipe) => ({
           id: recipe.id,
           recipeName: recipe.recipeName,
@@ -59,8 +62,11 @@ export default function Home() {
   useEffect(() => {
     const fetchInitialRecipes = async () => {
       console.log("Fetching initial recipes");
+      if (!user) {
+        return;
+      }
       try {
-        const initialRecipes = await fetchRecipes(currentRecipeIds);
+        const initialRecipes = await fetchRecipes(user?.id, currentRecipeIds);
         setRecipes(initialRecipes);
         const initialRecipeIds = initialRecipes.map((recipe) => recipe.id);
         setCurrentRecipeIds((prevIds) => {
