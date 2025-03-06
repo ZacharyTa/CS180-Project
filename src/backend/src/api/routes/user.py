@@ -15,3 +15,5 @@ async def get_user_id():
 #   env list           Lists all virtualenvs associated with the current project.
 #   env remove         Remove virtual environments associated with the project.
 #   env use            Activates or creates a new virtualenv for the current project.
+
+# ZACH: REMOVE THIS?
