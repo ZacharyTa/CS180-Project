@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { likeRecipe, unlikeRecipe } from "@/app/api";
+import {
+  likeRecipe,
+  unlikeRecipe,
+  dislikeRecipe,
+  undislikeRecipe,
+} from "@/app/api";
 
 interface BoxProps {
   id: number;
@@ -30,6 +35,7 @@ const Box = ({
   isProfile,
 }: BoxProps) => {
   const [liked, setLiked] = useState(isProfile);
+  const [disliked, setDisliked] = useState(false); // ZACH change this
 
   const handleLikeClick = () => {
     setLiked((prevLiked) => !prevLiked);
@@ -37,6 +43,15 @@ const Box = ({
       likeRecipe(userId, id);
     } else {
       unlikeRecipe(userId, id);
+    }
+  };
+
+  const handleDislikeClick = () => {
+    setDisliked((prevDisliked) => !prevDisliked);
+    if (!disliked) {
+      dislikeRecipe(userId, id);
+    } else {
+      undislikeRecipe(userId, id);
     }
   };
 
@@ -59,12 +74,24 @@ const Box = ({
         </p>
         <p className="text-black text-sm">{cookingInstructions}</p>
       </div>
-      <button
-        className={`btn ${liked ? "btn-error" : "bg-transparent"} w-10`}
-        onClick={handleLikeClick}
-      >
-        Like
-      </button>
+      <div className="flex flex-row items-center justify-between">
+        <button
+          className={`btn ${liked ? "btn-error" : "bg-transparent"} w-12`}
+          onClick={handleLikeClick}
+          disabled={disliked}
+        >
+          Like
+        </button>
+        <button
+          className={`btn ${
+            disliked ? "btn-secondary" : "bg-transparent"
+          } w-12`}
+          onClick={handleDislikeClick}
+          disabled={liked}
+        >
+          Dislike
+        </button>
+      </div>
     </div>
   );
 };

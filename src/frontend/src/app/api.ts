@@ -107,6 +107,58 @@ export const unlikeRecipe = async (
   }
 };
 
+export const dislikeRecipe = async (
+  userId: string,
+  recipeId: number
+): Promise<boolean> => {
+  console.log("disLiking Recipe", recipeId);
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/v1/recipes/dislike_recipe/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, recipeId }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to like recipe");
+    }
+    return true;
+  } catch (error) {
+    console.error("Error liking recipe:", error);
+    return false;
+  }
+};
+
+export const undislikeRecipe = async (
+  userId: string,
+  recipeId: number
+): Promise<boolean> => {
+  console.log("UnDisliking Recipe", recipeId);
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/v1/recipes/undislike_recipe/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, recipeId }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to undislike recipe");
+    }
+    return true;
+  } catch (error) {
+    console.error("Error undisliking recipe:", error);
+    return false;
+  }
+};
+
 export const setDietPreference = async (
   data: DietPreference
 ): Promise<boolean> => {

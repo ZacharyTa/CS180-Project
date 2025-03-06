@@ -24,26 +24,37 @@ async def get_random_recipes(request: FetchRecipeBatchRequest):
     response = [recipe.to_dict() for recipe in recipe_list]
     return response
 
-class LikeRecipeRequest(BaseModel):
+class RecipeRequest(BaseModel):
     user_id: str = Field(..., alias="userId")
     recipe_id: int = Field(..., alias="recipeId")
 
 @router.post("/like_recipe", response_model=bool)
-async def like_recipe(request: LikeRecipeRequest):
+async def like_recipe(request: RecipeRequest):
     
     recipe_client = RecipeClient(user_id=request.user_id)
     response = await recipe_client.like_recipe(request.recipe_id)
     return response
 
-class UnlikeRecipeRequest(BaseModel):
-    user_id: str = Field(..., alias="userId")
-    recipe_id: int = Field(..., alias="recipeId")
-
 @router.post("/unlike_recipe", response_model=bool)
-async def dislike_recipe(request: UnlikeRecipeRequest):
+async def dislike_recipe(request: RecipeRequest):
     
     recipe_client = RecipeClient(user_id=request.user_id)
     response = await recipe_client.unlike_recipe(request.recipe_id)
+    return response
+
+# for disliking
+@router.post("/dislike_recipe", response_model=bool)
+async def dislike_recipe(request: RecipeRequest):
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.dislike_recipe(request.recipe_id)
+    return response
+
+@router.post("/undislike_recipe", response_model=bool)
+async def undislike_recipe(request: RecipeRequest):
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.undislike_recipe(request.recipe_id)
     return response
 
 
@@ -60,3 +71,4 @@ async def get_likes(user_id: str = Query(..., alias="userId")):# -> list[dict[st
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    

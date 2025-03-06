@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 
 interface DietaryFormProps {
   initialDietaryPreference?: string;
@@ -45,6 +46,7 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({ dietaryPreference, allergies });
+    Cookies.set("currentRecipeIds", JSON.stringify([]));
   };
 
   return (

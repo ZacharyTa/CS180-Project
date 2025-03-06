@@ -95,6 +95,36 @@ class RecipeClient:
             print(f"Error: {e}")
             return False
         
+    async def dislike_recipe(self, recipe_id: int) -> bool:
+        
+        try:
+            response = (
+                self.supabase.table("user_disliked_recipes")
+                .upsert({"user_id": self.user_id, "recipe_id": recipe_id}, ignore_duplicates=False)
+                .execute()
+            )
+
+            return True
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+        
+    async def undislike_recipe(self, recipe_id: int) -> bool:
+        
+        try:
+            response = (
+                self.supabase.table("user_disliked_recipes")
+                .delete()
+                .eq("user_id", self.user_id)
+                .eq("recipe_id", recipe_id)
+                .execute()
+            )
+
+            return True
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+        
     async def get_likes(self) -> list[Recipe]:
         liked_recipes: list[Recipe] = []
 
