@@ -29,10 +29,8 @@ async def set_user_diet_preference(request: UserDietPayload):
 
 @router.get("/get_preference", response_model=DietPreference)
 async def get_user_diet_preference(user_id: str = Query(..., alias="userId")):
-    print(f"IM HERER AR: {user_id}")
+
     diet_client = DietPreferenceClient(user_id=user_id)
     response = await diet_client.get_user_diet_preference()
-
-    print(f"SDADASDASDAD: {response}")
 
     return response

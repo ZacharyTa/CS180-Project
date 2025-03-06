@@ -17,6 +17,8 @@ asyncpg = ">=0.30.0,<0.31.0"
 python-dotenv = ">=1.0.1,<2.0.0"
 supabase = ">=2.11.0,<3.0.0"
 fastapi-cors = "^0.0.6"
+fastembed = "^0.6.0"
+pandas = "^2.2.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.3.4,<9.0.0"

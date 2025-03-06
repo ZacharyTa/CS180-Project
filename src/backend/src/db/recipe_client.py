@@ -3,6 +3,8 @@ import dotenv
 from supabase import create_client, Client
 from src.schemas.recipe import Recipe
 from src.schemas.diet import DietPreference
+import numpy as np
+import json
 
 from postgrest.base_request_builder import APIResponse
 
@@ -14,6 +16,13 @@ class RecipeClient:
         self.supabase: Client = create_client(supabase_url=os.environ.get("NEXT_PUBLIC_SUPABASE_URL"), supabase_key=os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY"))
         self.user_id = user_id
 
+    def _to_numpy(embedding):
+        if not embedding:
+            return None
+        if isinstance(embedding, str):
+            embedding = json.loads(embedding)
+        return np.array(embedding, dtype=np.float32)
+
     def _get_sort_preference(self, diet_preference: str) -> tuple[str, bool]:
         preference_map = {
             "High Protein": ("proteins", True),
@@ -24,15 +33,48 @@ class RecipeClient:
         }
         
         return preference_map.get(diet_preference, (None, False)) 
+    
+    async def _get_latest_embedding(self, table_name: str) -> list[float] | None:
+        try:
+            response = (
+                self.supabase.table(table_name)
+                .select("recipe_id")
+                .eq("user_id", self.user_id)
+                .order("id", desc=True)
+                .limit(1)
+                .execute()
+            )
 
+            if not response.data:
+                return None
+
+            latest_recipe_id = response.data[0]["recipe_id"]
+
+            embedding_response = (
+                self.supabase.table("recipe")
+                .select("name_embedding")
+                .eq("id", latest_recipe_id)
+                .single()
+                .execute()
+            )
+
+            return embedding_response.data["name_embedding"] if embedding_response.data else None
+
+        except Exception as e:
+            print(f"Error fetching embedding from {table_name}: {e}")
+            return None
 
     async def get_recipe(self, recipe_id_list: list[int], diet_pref: DietPreference | None) -> list[Recipe]:
-        recipe_batch: list[Recipe] = []
-        response = APIResponse(data=[])
+
+        liked_embedding = await self._get_latest_embedding("user_recipes")
+        disliked_embedding = await self._get_latest_embedding("user_disliked_recipes")
+        
+        weight_liked = 0.7
+        weight_disliked = 0.3
 
         query = (
             self.supabase.table("recipe")
-            .select("*")
+            .select("id, name, cooking_instructions, image_url, calories, proteins, fats, carbs, allergens_list, name_embedding")
             .not_.in_("id", recipe_id_list)
         )
 
@@ -46,23 +88,52 @@ class RecipeClient:
             if sort_column:
                 query = query.order(sort_column, desc=sort_order)  # Sort dynamically
 
-        response = query.limit(10).execute()
+        # fetch batch of recipes catering to user's diet pref
+        response = query.limit(50).execute() 
 
-        if len(response.data) > 0:
-            for recipe in response.data:
-                recipe_batch.append(Recipe(
-                    id = recipe["id"],
-                    name = recipe["name"],
-                    cooking_instructions = recipe["cooking_instructions"],
-                    image_url = recipe["image_url"],
-                    calories = recipe["calories"],
-                    proteins = recipe["proteins"],
-                    fats = recipe["fats"],
-                    carbs = recipe["carbs"],
-                    allergens_list = recipe["allergens_list"]
-                ))
+        if not response.data:
+            return []
 
-        return recipe_batch
+        liked_embedding = self._to_numpy(liked_embedding)
+        disliked_embedding = self._to_numpy(disliked_embedding)
+
+        scored_recipes = []
+
+        for recipe in response.data:
+            recipe_embedding = self._to_numpy(recipe["name_embedding"])
+
+            if recipe_embedding is None:
+                continue 
+
+            liked_similarity = (
+                np.dot(recipe_embedding, liked_embedding) / (np.linalg.norm(recipe_embedding) * np.linalg.norm(liked_embedding))
+                if liked_embedding is not None else 0
+            )
+
+            disliked_similarity = (
+                np.dot(recipe_embedding, disliked_embedding) / (np.linalg.norm(recipe_embedding) * np.linalg.norm(disliked_embedding))
+                if disliked_embedding is not None else 0
+            )
+
+            score = (weight_liked * liked_similarity) + (weight_disliked * (1 - disliked_similarity))
+            
+            scored_recipes.append((recipe, score))
+
+        scored_recipes.sort(key=lambda x: x[1], reverse=True)
+
+        top_recipes = [Recipe(
+            id=r["id"],
+            name=r["name"],
+            cooking_instructions=r["cooking_instructions"],
+            image_url=r["image_url"],
+            calories=r["calories"],
+            proteins=r["proteins"],
+            fats=r["fats"],
+            carbs=r["carbs"],
+            allergens_list=r["allergens_list"]
+        ) for r, _ in scored_recipes[:10]]
+
+        return top_recipes
 
     
     async def like_recipe(self, recipe_id: int) -> bool:

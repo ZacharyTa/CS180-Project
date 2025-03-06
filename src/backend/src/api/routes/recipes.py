@@ -16,8 +16,6 @@ async def get_random_recipes(request: FetchRecipeBatchRequest):
 
     diet_pref_client = DietPreferenceClient(user_id=request.user_id)
     diet_pref = await diet_pref_client.get_user_diet_preference()
-
-    print(f"User diet preference: {diet_pref}")
     
     recipe_client = RecipeClient(user_id=request.user_id) # aghh hardcode for now
     recipe_list = await recipe_client.get_recipe(request.recipe_id_list, diet_pref)
