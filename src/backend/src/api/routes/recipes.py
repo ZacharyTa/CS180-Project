@@ -1,65 +1,72 @@
-import json
-import random
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
-from typing import List
+
+from src.db.diet_client import DietPreferenceClient
+from src.db.recipe_client import RecipeClient
+from typing import Any
 
 router = APIRouter()
 
-# Define the response model
-class Recipe(BaseModel):
-    id: int
-    recipeName: str
-    cookingInstructions: str
-    imageURL: str
-    calories: float
-    protein: float
-    fats: float
-    carbs: float
-    allergensList: List[str]
+class FetchRecipeBatchRequest(BaseModel):
+    user_id: str = Field(..., alias="userId")
+    recipe_id_list: list[int] = Field(..., alias="recipeList")
 
-# Load recipes from JSON file
-def load_recipes():
+@router.post("/get_recipes", response_model=list[dict[str, Any]]) # find out how todo: list[Recipe.to_dict()]
+async def get_random_recipes(request: FetchRecipeBatchRequest):
 
-    with open("merged_recipes.json", "r", encoding="utf-8") as file:
-        recipes = json.load(file)
-    return recipes
-
-@router.get("/get_recipes", response_model=List[Recipe])
-async def get_random_recipes():
-    recipes = load_recipes()
-    recipe_names = list(recipes.keys())
-    random_recipes = random.sample(recipe_names, min(10, len(recipe_names)))
+    diet_pref_client = DietPreferenceClient(user_id=request.user_id)
+    diet_pref = await diet_pref_client.get_user_diet_preference()
     
-    return [
-        {
-            "id": recipes[name]["id"],
-            "recipeName": recipes[name]["Recipe Name"],
-            "cookingInstructions": recipes[name]["Recipe Cooking Instructions"],
-            "imageURL": recipes[name]["Recipe Image URL"],
-            "calories": recipes[name]["Calories"],
-            "protein": recipes[name]["Protein"],
-            "fats": recipes[name]["Fats"],
-            "carbs": recipes[name]["Carbs"],
-            "allergensList": recipes[name]["Allergens list"],
-        }
-        for name in random_recipes
-    ]
+    recipe_client = RecipeClient(user_id=request.user_id) # aghh hardcode for now
+    recipe_list = await recipe_client.get_recipe(request.recipe_id_list, diet_pref)
+    response = [recipe.to_dict() for recipe in recipe_list]
+    return response
 
-class LikeRecipeRequest(BaseModel):
+class RecipeRequest(BaseModel):
     user_id: str = Field(..., alias="userId")
     recipe_id: int = Field(..., alias="recipeId")
 
 @router.post("/like_recipe", response_model=bool)
-async def like_recipe(request: LikeRecipeRequest):
-    print(f"user_id: {request.user_id} -> liked recipe with id {request.recipe_id}!")
-    return True # return true if theres no errors
-
-class UnlikeRecipeRequest(BaseModel):
-    user_id: str = Field(..., alias="userId")
-    recipe_id: int = Field(..., alias="recipeId")
+async def like_recipe(request: RecipeRequest):
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.like_recipe(request.recipe_id)
+    return response
 
 @router.post("/unlike_recipe", response_model=bool)
-async def dislike_recipe(request: UnlikeRecipeRequest):
-    print(f"user_id: {request.user_id} -> unliked recipe with id {request.recipe_id}!")
-    return True
+async def dislike_recipe(request: RecipeRequest):
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.unlike_recipe(request.recipe_id)
+    return response
+
+# for disliking
+@router.post("/dislike_recipe", response_model=bool)
+async def dislike_recipe(request: RecipeRequest):
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.dislike_recipe(request.recipe_id)
+    return response
+
+@router.post("/undislike_recipe", response_model=bool)
+async def undislike_recipe(request: RecipeRequest):
+    
+    recipe_client = RecipeClient(user_id=request.user_id)
+    response = await recipe_client.undislike_recipe(request.recipe_id)
+    return response
+
+
+@router.get("/get_liked_recipes", response_model=list[dict[str, Any]])
+async def get_likes(user_id: str = Query(..., alias="userId")):# -> list[dict[str, Any]]:
+    try:
+        recipe_client = RecipeClient(user_id=user_id)
+        recipe_list = await recipe_client.get_likes()
+
+        if recipe_list is None:
+            raise HTTPException(status_code=404, detail="No liked recipes found")
+        
+        response = [recipe.to_dict() for recipe in recipe_list]
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
