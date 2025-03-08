@@ -1,9 +1,15 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import Avatar from "@/components/avatar";
-import type { Session } from "@supabase/supabase-js";
+import type { User, Session } from "@supabase/supabase-js";
 
-export default function Account({ session }: { session: Session }) {
+export default function Account({
+  user,
+  session,
+}: {
+  user: User | null;
+  session: Session | null;
+}) {
   const [loading, setLoading] = useState(true);
   const [avatar_url, setAvatarUrl] = useState<string | null>(null);
 
@@ -11,7 +17,10 @@ export default function Account({ session }: { session: Session }) {
     let ignore = false;
     async function getProfile() {
       setLoading(true);
-      const { user } = session;
+
+      if (!user) {
+        return;
+      }
 
       const { data, error } = await supabase
         .from("profiles")
@@ -44,7 +53,12 @@ export default function Account({ session }: { session: Session }) {
     event.preventDefault();
 
     setLoading(true);
-    const { user } = session;
+
+    if (!user) {
+      alert("User not found");
+      setLoading(false);
+      return;
+    }
 
     const updates = {
       id: user.id,

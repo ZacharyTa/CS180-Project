@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import RecipeCarousel from "@/components/recipe-carousel";
 import Box from "@/components/test-recipe";
-import TabBar from "@/components/tab-bar";
 import { fetchRecipes } from "@/app/api";
 import { Recipe } from "@/lib/types/recipe";
 import { useAuth } from "@/context/authContext";
@@ -84,7 +83,6 @@ export default function Home() {
 
   return (
     <main className="h-screen w-full bg-black">
-      <TabBar />
       <RecipeCarousel onLastSlide={loadMoreRecipes}>
         {user &&
           Recipes.map((Recipe) => (

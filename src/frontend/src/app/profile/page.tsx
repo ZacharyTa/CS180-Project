@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/authContext";
 import Account from "@/components/account";
 import RecipeCard from "@/components/recipe-card";
-import TabBar from "@/components/tab-bar";
 import {
   getLikedRecipes,
   setDietPreference,
@@ -98,19 +97,16 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Tab Bar */}
-      <TabBar />
-
       <div className="flex items-center gap-4 p-4">
-        <Account session={session} />
-        <div>
+        <Account user={user} session={session} />
+        <div className="flex flex-col gap-2 text-center justify-between">
           <h1 className="text-lg font-semibold">{user?.email}</h1>
+          <button className="btn btn-primary" onClick={openDietModal}>
+            My Diet
+          </button>
         </div>
       </div>
       <div className="divider" />
-      <button className="btn" onClick={openDietModal}>
-        My Diet
-      </button>
 
       <div className="pt-32 pb-6 px-1">
         <div className="grid grid-cols-3 gap-4">
