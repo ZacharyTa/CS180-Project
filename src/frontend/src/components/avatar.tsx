@@ -71,11 +71,10 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Profile Picture with Clickable Frame */}
       <div
         className="rounded-full border-4 border-gray-300 shadow-md cursor-pointer hover:opacity-90 transition"
         style={{ height: size, width: size }}
-        onClick={() => setShowDropdown(!showDropdown)} // Toggle dropdown
+        onClick={() => setShowDropdown(!showDropdown)}
       >
         {avatarUrl ? (
           <Image
@@ -93,7 +92,7 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
         )}
       </div>
 
-      {/* Dropdown for "Edit Profile Pic ADD FORM HERE?" */}
+      {/*ADD FORM HERE?" */}
       {showDropdown && (
         <div className="absolute top-32 bg-white shadow-lg p-2 rounded-md">
           <label className="cursor-pointer text-sm font-semibold text-[#001F3F] ">
