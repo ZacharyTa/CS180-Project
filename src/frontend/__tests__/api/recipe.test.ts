@@ -11,6 +11,11 @@ import {
 import { Recipe } from "@/lib/types/recipe";
 import { DietPreference } from "@/lib/types/diet";
 
+beforeAll(() => {
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "log").mockImplementation(() => {});
+});
+
 describe("API functions", () => {
   beforeEach(() => {
     jest.clearAllMocks();

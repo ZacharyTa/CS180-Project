@@ -98,7 +98,10 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
 
       {/*ADD FORM HERE?" */}
       {showDropdown && (
-        <div className="absolute top-32 bg-white shadow-lg p-2 rounded-md">
+        <div
+          className="absolute top-32 bg-white shadow-lg p-2 rounded-md"
+          data-testid="avatar-dropdown"
+        >
           <label className="cursor-pointer text-sm font-semibold text-[#001F3F] ">
             {uploading ? "Uploading ..." : "Edit Profile Pic"}
             <input
