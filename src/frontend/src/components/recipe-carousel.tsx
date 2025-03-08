@@ -16,7 +16,7 @@ export default function RecipeCarousel({
     axis: "y",
     loop: false,
     dragFree: false,
-    containScroll: "trimSnaps", // Makes sure it aligns items properly
+    containScroll: "trimSnaps",
   });
   const [isLastSlide, setIsLastSlide] = useState(false);
 
