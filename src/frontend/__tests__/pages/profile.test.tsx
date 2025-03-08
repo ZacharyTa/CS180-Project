@@ -26,7 +26,7 @@ jest.mock("@/context/authContext", () => ({
   useAuth: jest.fn(),
 }));
 
-jest.mock("@/components/Account", () => {
+jest.mock("@/components/account", () => {
   const AccountMock = ({ session }: { session: Session }) => (
     <div data-testid="account">
       Account Component - {session ? "Session Active" : "No Session"}
