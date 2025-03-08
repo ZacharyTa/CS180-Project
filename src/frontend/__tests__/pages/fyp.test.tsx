@@ -13,12 +13,6 @@ jest.mock("@/context/authContext", () => ({
   useAuth: jest.fn(),
 }));
 
-// Mock child components
-jest.mock("@/components/tab-bar", () => {
-  const TabBarMock = () => <div data-testid="tab-bar">TabBar</div>;
-  TabBarMock.displayName = "TabBarMock";
-  return TabBarMock;
-});
 jest.mock("@/components/recipe-carousel", () => {
   const RecipeCarouselMock = ({
     onLastSlide,
@@ -75,7 +69,7 @@ describe("FYPPage Component", () => {
     jest.clearAllMocks();
   });
 
-  it("renders TabBar and RecipeCarousel", async () => {
+  it("renders RecipeCarousel", async () => {
     (fetchRecipes as jest.Mock).mockResolvedValue(mockRecipes);
     (useAuth as jest.Mock).mockReturnValue({ user: { id: "user-123" } });
 
@@ -83,7 +77,6 @@ describe("FYPPage Component", () => {
       render(<FYPPage />);
     });
 
-    expect(screen.getByTestId("tab-bar")).toBeInTheDocument();
     expect(screen.getByTestId("recipe-carousel")).toBeInTheDocument();
   });
 

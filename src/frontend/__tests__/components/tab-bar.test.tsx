@@ -1,8 +1,23 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import TabBar from "@/components/tab-bar";
+import { supabase } from "@/lib/supabase";
 
 const pushMock = jest.fn();
+
+jest.mock("@/lib/supabase", () => ({
+  supabase: {
+    auth: {
+      signOut: jest.fn(),
+    },
+  },
+}));
+
+jest.mock("lucide-react", () => ({
+  Heart: () => <div data-testid="heart-icon" />,
+  Home: () => <div data-testid="home-icon" />,
+  LogOut: () => <div data-testid="logout-icon" />,
+}));
 
 jest.mock("next/navigation", () => {
   return {
@@ -42,5 +57,11 @@ describe("Ensure all components are properly rendering", () => {
     const forYouButton = screen.getByRole("tab", { name: /Profile/i });
     fireEvent.click(forYouButton);
     expect(pushMock).toHaveBeenCalledWith("/profile");
+  });
+  it("TabBar Navigation -> Logout", () => {
+    render(<TabBar />);
+    const logoutButton = screen.getByRole("tab", { name: /Logout/i });
+    fireEvent.click(logoutButton);
+    expect(supabase.auth.signOut).toHaveBeenCalled();
   });
 });

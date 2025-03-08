@@ -7,26 +7,27 @@ import {
   waitFor,
 } from "@testing-library/react";
 import ProfilePage from "@/app/profile/page";
-import { fetchRecipes } from "@/app/api";
+import { fetchRecipes, getLikedRecipes } from "@/app/api";
 import { useAuth } from "@/context/authContext";
+import type { Session } from "@supabase/supabase-js";
+import type { Recipe } from "@/lib/types/recipe";
 
-// Mock API and Auth Context
 jest.mock("@/app/api", () => ({
   fetchRecipes: jest.fn(),
+}));
+
+jest.mock("@/app/api", () => ({
+  getLikedRecipes: jest.fn(), // Add this
+  fetchRecipes: jest.fn(),
+  // Add other API functions if needed
 }));
 
 jest.mock("@/context/authContext", () => ({
   useAuth: jest.fn(),
 }));
 
-// Mock child components
-jest.mock("@/components/tab-bar", () => {
-  const TabBarMock = () => <div data-testid="tab-bar">TabBar</div>;
-  TabBarMock.displayName = "TabBarMock";
-  return TabBarMock;
-});
 jest.mock("@/components/Account", () => {
-  const AccountMock = ({ session }: { session: any }) => (
+  const AccountMock = ({ session }: { session: Session }) => (
     <div data-testid="account">
       Account Component - {session ? "Session Active" : "No Session"}
     </div>
@@ -58,9 +59,9 @@ jest.mock("@/components/test-recipe", () => {
 });
 
 describe("ProfilePage Component", () => {
-  const mockRecipes = [
+  const mockRecipes: Recipe[] = [
     {
-      id: "1",
+      id: 1,
       recipeName: "Recipe 1",
       imageURL: "/recipe1.jpg",
       cookingInstructions: "Cook it well",
@@ -71,7 +72,7 @@ describe("ProfilePage Component", () => {
       allergensList: [],
     },
     {
-      id: "2",
+      id: 2,
       recipeName: "Recipe 2",
       imageURL: "/recipe2.jpg",
       cookingInstructions: "Mix it up",
@@ -85,9 +86,10 @@ describe("ProfilePage Component", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (getLikedRecipes as jest.Mock).mockResolvedValue(mockRecipes);
   });
 
-  it("renders ProfilePage components (TabBar, Account, Recipe Grid)", async () => {
+  it("renders ProfilePage components (Account, Recipe Grid)", async () => {
     fetchRecipes.mockResolvedValue(mockRecipes);
     useAuth.mockReturnValue({
       user: { id: "user-123", email: "test@example.com" },
@@ -98,7 +100,6 @@ describe("ProfilePage Component", () => {
       render(<ProfilePage />);
     });
 
-    expect(screen.getByTestId("tab-bar")).toBeInTheDocument();
     expect(screen.getByTestId("account")).toBeInTheDocument();
     expect(screen.getByText("test@example.com")).toBeInTheDocument();
   });
