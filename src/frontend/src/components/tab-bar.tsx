@@ -1,30 +1,40 @@
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import { Home, Heart, LogOut } from "lucide-react";
 
 const TabBar = () => {
-  const router = useRouter();
   const currentPath = usePathname();
 
   return (
-    <div className="fixed top-0 z-50 w-full backdrop-blur-xs shadow-md flex justify-center bg-gray-700/45">
-      <div className="flex space-x-6 p-2 mix-blend-exclusion">
-        <button
-          role="tab"
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+    <div className="fixed top-0 z-20 w-full shadow-md flex items-center bg-[#3a3a5a] border-b border-white border-opacity-20 p-4">
+      <div className="flex-row flex items-center justify-between gap-4 h-full">
+        <Link
+          href="/fyp"
+          className={`text-white ${
             currentPath === "/fyp" ? "font-extrabold" : "font-normal"
           }`}
-          onClick={() => router.push("/fyp")}
         >
-          For You
-        </button>
+          <Heart size={20} />
+          <div className="text-sm font-bold">For You</div>
+        </Link>
+        {/* Logout Button */}
         <button
-          role="tab"
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+          onClick={() => supabase.auth.signOut()}
+          className="text-white mr-4"
+        >
+          <LogOut size={18} className="mr-2" />
+          <div className="text-sm font-bold">Logout</div>
+        </button>
+        <Link
+          href="/profile"
+          className={`text-white ${
             currentPath === "/profile" ? "font-extrabold" : "font-normal"
           }`}
-          onClick={() => router.push("/profile")}
         >
-          Profile
-        </button>
+          <Home size={20} />
+          <div className="text-sm font-bold">Profile</div>
+        </Link>
       </div>
     </div>
   );

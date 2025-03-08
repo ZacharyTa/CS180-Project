@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { supabase } from "@/lib/supabase";
-import Avatar from "@/components/Avatar";
+import Avatar from "@/components/avatar";
+import type { Session } from "@supabase/supabase-js";
 
-export default function Account({ session }) {
+export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
-  const [avatar_url, setAvatarUrl] = useState(null);
+  const [avatar_url, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     let ignore = false;
@@ -36,7 +37,10 @@ export default function Account({ session }) {
     };
   }, [session]);
 
-  async function updateProfile(event, avatarUrl) {
+  async function updateProfile(
+    event: ChangeEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>,
+    avatarUrl: string | null
+  ) {
     event.preventDefault();
 
     setLoading(true);
@@ -58,8 +62,13 @@ export default function Account({ session }) {
     setLoading(false);
   }
 
+  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    updateProfile(event, avatar_url);
+  };
+
   return (
-    <form onSubmit={updateProfile} className="form-widget">
+    <form onSubmit={handleSubmit} className="form-widget">
       <Avatar
         url={avatar_url}
         size={150}
@@ -67,15 +76,11 @@ export default function Account({ session }) {
           updateProfile(event, url);
         }}
       />
-
-      <div>
-        <button
-          className="btn btn-error"
-          onClick={() => supabase.auth.signOut()}
-        >
-          Sign Out
-        </button>
-      </div>
+      {loading && (
+        <div className="absolute top-32 bg-white shadow-lg p-2 rounded-md">
+          <p>Uploading...</p>
+        </div>
+      )}
     </form>
   );
 }

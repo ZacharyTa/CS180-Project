@@ -1,8 +1,8 @@
 "use client";
 
-import Account from "@/components/Account";
-import { useAuth } from "@/context/authContext";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/authContext";
+import Account from "@/components/account";
 import RecipeCard from "@/components/recipe-card";
 import TabBar from "@/components/tab-bar";
 import {
@@ -16,7 +16,7 @@ import Box from "@/components/test-recipe";
 import DietaryForm from "@/components/diet-form";
 
 export default function ProfilePage() {
-  const { user, session } = useAuth();
+  const { user, session } = useAuth(); // Ensure `user` is fetched properly
   const [likedRecipes, setLikedRecipes] = useState<Recipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null); // State for modal
   const [boxModalOpen, setBoxModalOpen] = useState(false); // Controls modal visibility
@@ -97,7 +97,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
+      {/* Tab Bar */}
       <TabBar />
 
       <div className="flex items-center gap-4 p-4">
