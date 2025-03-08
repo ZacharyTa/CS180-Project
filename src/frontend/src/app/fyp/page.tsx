@@ -8,7 +8,7 @@ import { Recipe } from "@/lib/types/recipe";
 import { useAuth } from "@/context/authContext";
 import Cookies from "js-cookie";
 
-export default function Home() {
+export default function FYPPage() {
   const [Recipes, setRecipes] = useState<Recipe[]>([]);
   const [currentRecipeIds, setCurrentRecipeIds] = useState<number[]>(() => {
     const cookieValue = Cookies.get("currentRecipeIds");
@@ -43,10 +43,20 @@ export default function Home() {
       setCurrentRecipeIds(updatedRecipeIds);
       Cookies.set("currentRecipeIds", JSON.stringify(updatedRecipeIds));
       setRecipes((prevRecipes: Recipe[]) => {
-        const updatedRecipes = [...prevRecipes, ...newRecipes];
-        console.log("Updated Recipes length:", updatedRecipes);
-        return updatedRecipes;
+        const uniqueRecipes = [...prevRecipes, ...newRecipes].reduce(
+          (acc, recipe) => {
+            if (!acc.some((r) => r.id === recipe.id)) {
+              acc.push(recipe);
+            }
+            return acc;
+          },
+          [] as Recipe[]
+        );
+
+        console.log("Updated Recipes length:", uniqueRecipes);
+        return uniqueRecipes;
       });
+
       return true;
     } catch (error) {
       console.error("Error loading more recipes:", error);
@@ -86,20 +96,7 @@ export default function Home() {
       <RecipeCarousel onLastSlide={loadMoreRecipes}>
         {user &&
           Recipes.map((Recipe) => (
-            <Box
-              key={Recipe.id}
-              id={Recipe.id}
-              title={Recipe.recipeName}
-              imgUrl={Recipe.imageURL}
-              cookingInstructions={Recipe.cookingInstructions}
-              calories={Recipe.calories}
-              protein={Recipe.protein}
-              carbs={Recipe.carbs}
-              fats={Recipe.fats}
-              allergensList={Recipe.allergensList}
-              userId={user?.id}
-              isProfile={false}
-            />
+            <Box key={Recipe.id} userId={user?.id} recipe={Recipe} isProfile={false}/>
           ))}
       </RecipeCarousel>
     </main>

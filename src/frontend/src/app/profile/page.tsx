@@ -108,7 +108,7 @@ export default function ProfilePage() {
       </div>
       <div className="divider" />
 
-      <div className="pt-32 pb-6 px-1">
+      <div className="pt-6 pb-6 px-1">
         <div className="grid grid-cols-3 gap-4">
           {user &&
             likedRecipes.map((recipe) => (
@@ -151,19 +151,8 @@ export default function ProfilePage() {
             >
               ✕
             </button>
-            <Box
-              id={selectedRecipe.id}
-              title={selectedRecipe.recipeName}
-              imgUrl={selectedRecipe.imageURL}
-              cookingInstructions={selectedRecipe.cookingInstructions}
-              calories={selectedRecipe.calories}
-              protein={selectedRecipe.protein}
-              carbs={selectedRecipe.carbs}
-              fats={selectedRecipe.fats}
-              allergensList={selectedRecipe.allergensList}
-              userId={user?.id}
-              isProfile={true}
-            />
+            {/* Pass selected recipe to Box component */}
+            <Box userId={user?.id} recipe={selectedRecipe} isProfile={true} />
           </div>
           <div className="modal-backdrop" onClick={closeBoxModal}></div>
         </dialog>
