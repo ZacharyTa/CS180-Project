@@ -70,11 +70,14 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
   }
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div
+      className="relative flex flex-col items-center "
+      data-testid="avatar-container"
+      onClick={() => setShowDropdown(!showDropdown)}
+    >
       <div
         className="rounded-full border-4 border-gray-300 shadow-md cursor-pointer hover:opacity-90 transition"
         style={{ height: size, width: size }}
-        onClick={() => setShowDropdown(!showDropdown)}
       >
         {avatarUrl ? (
           <Image
@@ -83,6 +86,7 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
             className="rounded-full border-4 border-gray-300 shadow-md avatar image"
             width={size}
             height={size}
+            unoptimized
           />
         ) : (
           <div

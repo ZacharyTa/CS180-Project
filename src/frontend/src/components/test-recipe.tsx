@@ -63,6 +63,8 @@ const Box = ({ userId, recipe, isProfile }: BoxProps) => {
         </p>
         <div className="flex flex-row items-center justify-between">
           <button
+            role="like"
+            aria-label="like"
             className={`btn ${liked ? "btn-error" : "bg-transparent"} w-12`}
             onClick={handleLikeClick}
             disabled={disliked}
@@ -70,6 +72,8 @@ const Box = ({ userId, recipe, isProfile }: BoxProps) => {
             Like
           </button>
           <button
+            role="dislike"
+            aria-label="dislike"
             className={`btn ${
               disliked ? "btn-secondary" : "bg-transparent"
             } w-12`}
