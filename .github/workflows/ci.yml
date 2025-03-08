@@ -41,6 +41,6 @@ jobs:
         run: npm run build
         working-directory: src/frontend
 
-      # - name: Frontend:Run Jest Tests
-      #   run: npm test -- --ci --coverage
-      #   working-directory: src/frontend
+      - name: Frontend:Run Jest Tests
+        run: npm test -- --ci --coverage
+        working-directory: src/frontend
