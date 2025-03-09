@@ -37,6 +37,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase-anon-key> # We will provide this in the 
 npm run dev
 ```
 
+- If you aren't redirected to `http://localhost:3000/fyp` immediately, refresh the page
+
 6. Open [http://localhost:3000](http://localhost:3000) in your browser to see the app.
 
 ## Available Scripts
