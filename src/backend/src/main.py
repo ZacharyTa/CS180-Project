@@ -1,4 +1,3 @@
-# FastAPI application entry point
 from fastapi import FastAPI
 from src.api.routes import recipes, diet
 

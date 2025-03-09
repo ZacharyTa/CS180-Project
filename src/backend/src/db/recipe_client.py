@@ -11,6 +11,54 @@ from postgrest.base_request_builder import APIResponse
 dotenv.load_dotenv()
 
 class RecipeClient:
+    """
+    A class that handles talking to the database about recipes. Lets users like/dislike 
+    recipes and get recommendations based on what they prefer. Works with Supabase
+
+    Attributes
+    ----------
+    supabase : Client
+        The Supabase connection we use to do database stuff
+    user_id : int
+        Which user we're dealing with recipes for
+
+    Methods
+    -------
+    __init__(user_id: int) -> None:
+        Gets everything ready. Needs a user ID to know whose recipes to handle
+
+    _to_numpy(embedding) -> np.ndarray | None:
+        Converts weird embedding formats (like JSON strings) into NumPy arrays
+        Returns None if it's empty
+
+    _get_sort_preference(diet_preference: str) -> tuple[str, bool]:
+        Decides how to sort recipes based on diet stuff. Like if they want high protein,
+        we sort by protein numbers
+
+    async _get_latest_embedding(table_name: str) -> list[float] | None:
+        Gets the newest embedding from either liked or disliked recipes table
+        Basically finds what recipe the user last reacted to
+
+    async get_recipe(recipe_id_list: list[int], diet_pref: DietPreference | None) -> list[Recipe]:
+        Main method to get recipe suggestions. Avoids recipes they've already seen,
+        checks their diet preferences, and uses some math magic with embeddings to
+        find recipes similar to what they like
+
+    async like_recipe(recipe_id: int) -> bool:
+        Adds a recipe to the user's "liked" list. Returns True if it worked
+
+    async unlike_recipe(recipe_id: int) -> bool:
+        Removes a recipe from the "liked" list. Returns True if successful
+
+    async dislike_recipe(recipe_id: int) -> bool:
+        Adds a recipe to the "disliked" list. Returns True if it worked
+
+    async undislike_recipe(recipe_id: int) -> bool:
+        Removes a recipe from the "disliked" list. Returns True if successful
+
+    async get_likes() -> list[Recipe]:
+        Gets all the recipes this user has liked before
+    """
     
     def __init__(self, user_id: int) -> None:
         self.supabase: Client = create_client(supabase_url=os.environ.get("NEXT_PUBLIC_SUPABASE_URL"), supabase_key=os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY"))

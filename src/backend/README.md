@@ -27,7 +27,7 @@ FastAPI-based backend server for the recipe application.
 5. activate a virtual environment:
 
    ```bash
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   source .venv/bin/activate  # On Windows use: venv\Scripts\activate
    ```
 
 6. . Start the server with uvicorn:
