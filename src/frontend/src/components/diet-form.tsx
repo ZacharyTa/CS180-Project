@@ -35,6 +35,12 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
     "Egg",
   ];
 
+  // ughhh this is so hacky
+  const dietaryTextMap: { [key: string]: string } = {
+    "High Protein": " (Gain muscle)",
+    "Low Calories": " (Lose weight)",
+  };
+
   const handleCheckboxChange = (allergy: string) => {
     setAllergies((prev) =>
       prev.includes(allergy)
@@ -73,6 +79,9 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
                 onChange={() => setDietaryPreference(option)}
               />
               {option}
+              <span className="text-success">
+                {dietaryTextMap[option] || ""}
+              </span>
             </label>
           ))}
         </div>

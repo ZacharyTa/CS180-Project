@@ -57,7 +57,7 @@ describe("DietaryForm Component", () => {
     render(<DietaryForm loading={false} onSubmit={onSubmitMock} />);
 
     dietaryOptions.forEach((option) => {
-      const radio = screen.getByLabelText(option);
+      const radio = screen.getByDisplayValue(option);
       fireEvent.click(radio);
       expect(radio).toBeChecked();
     });
@@ -109,12 +109,12 @@ describe("DietaryForm Component", () => {
 
     // No radio should be checked initially
     dietaryOptions.forEach((option) => {
-      expect(screen.getByLabelText(option)).not.toBeChecked();
+      expect(screen.getByDisplayValue(option)).not.toBeChecked();
     });
 
     // No checkboxes should be checked
     allergyOptions.forEach((allergy) => {
-      expect(screen.getByLabelText(allergy)).not.toBeChecked();
+      expect(screen.getByDisplayValue(allergy)).not.toBeChecked();
     });
   });
 });
