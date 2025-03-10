@@ -9,7 +9,7 @@ FastAPI-based backend server for the recipe application.
 
 ## Setup Instructions
 
-1. Install Python 3.13.1
+1. Install Python 3.13.1 (if on windows, make a venv now with Python 3.13.1 with `py -3.13 -m venv .venv` then `.venv\Scripts\activate`) 
 
 2. Install Poetry
 
@@ -27,7 +27,7 @@ FastAPI-based backend server for the recipe application.
 5. activate a virtual environment:
 
    ```bash
-   source .venv/bin/activate  # On Windows use: venv\Scripts\activate
+   source .venv/bin/activate
    ```
 
 6. . Start the server with uvicorn:
