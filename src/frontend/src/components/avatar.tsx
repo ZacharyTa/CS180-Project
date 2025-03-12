@@ -41,6 +41,7 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
   }
 
   async function uploadAvatar(event: UploadAvatarEvent): Promise<void> {
+    console.log("uploadAvatar", event);
     try {
       setUploading(true);
 
@@ -101,6 +102,7 @@ export default function Avatar({ url, size, onUpload }: AvatarProps) {
         <div
           className="absolute top-32 bg-white shadow-lg p-2 rounded-md"
           data-testid="avatar-dropdown"
+          onClick={(e) => e.stopPropagation()}
         >
           <label className="cursor-pointer text-sm font-semibold text-[#001F3F] ">
             {uploading ? "Uploading ..." : "Edit Profile Pic"}
