@@ -7,30 +7,33 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [signupLoading, setSignupLoading] = useState<boolean>(false);
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
 
   // Sign in with email & password
   const handleLogin = async () => {
-    setLoading(true);
+    setLoginLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) console.error("Login error:", error.message);
     else {
-        router.push("/fyp"); // Redirect after login
-        setLoading(false);
+      router.push("/fyp"); // Redirect after login
+      setLoginLoading(false);
     }
   };
 
   // Sign up with email & password
   const handleSignUp = async () => {
+    setSignupLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
       password,
     });
     if (error) console.error("Signup error:", error.message);
     else alert("Check your email for a confirmation link!");
+    setSignupLoading(false);
   };
 
   // Sign in with Google
@@ -80,22 +83,22 @@ export default function Login() {
         <button
           onClick={handleLogin}
           className="w-1/2 bg-white text-black py-1.5 rounded-lg hover:bg-gray-300 mb-2 transition block mx-auto shadow-md font-bold"
-          disabled={loading}
+          disabled={loginLoading}
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loginLoading ? "Signing in..." : "Sign In"}
         </button>
 
         <button
           onClick={handleSignUp}
-          className="w-1/2 bg-transparent border border-white text-white py-1.5 rounded-lg hover:bg-white hover:text-black transition block mx-auto shadow-md font-bold"
-          disabled={loading}
+          className="w-1/2 bg-transparent border border-white text-white py-1.5 rounded-lg hover:bg-success hover:text-black transition block mx-auto shadow-md font-bold"
+          disabled={signupLoading}
         >
-          {loading ? "Signing up..." : "Sign Up"}
+          {signupLoading ? "Signing up..." : "Sign Up"}
         </button>
 
         <p
           onClick={handleGoogleLogin}
-          className="text-gray-300 text-sm text-center mt-3 cursor-pointer hover:text-white transition font-bold"
+          className="text-gray-300 text-sm text-center mt-3 cursor-pointer hover:text-success transition font-bold"
         >
           Sign In With Google
         </p>

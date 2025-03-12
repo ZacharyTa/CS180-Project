@@ -7,26 +7,34 @@ dotenv.load_dotenv()
 
 class DietPreferenceClient:
     """
-    A client class to interact with the diet preference data stored in a Supabase database.
+    Handles saving and getting people's diet choices from the database
+    Remembers stuff like diet preferences(keto, high protein, ...) or food allergies using Supabase
+
+    Attributes
+    ----------
+    supabase : Client
+        The connection to Supabase we use to talk to the database
+    user_id : str
+        Which user we're dealing with (their unique ID)
 
     Methods
     -------
     __init__(user_id: str):
-        Initializes the DietPreferenceClient with a Supabase client instance.
-        Parameters:
-            user_id (str): The ID of the user whose diet preference is to be handled.
+        Sets up the client. Needs the user's ID to know whose diet stuff to manage
 
     async get_user_diet_preference() -> DietPreference:
-        Retrieves the diet preference for a given user ID from the Supabase database.
+        Gets what this user likes to eat and what they're allergic to
+        If they don't have any saved preferences yet, makes a new empty entry for them
         Returns:
-            DietPreference: An instance of DietPreference containing the user's diet preference data.
+            DietPreference: Their diet settings wrapped in a DietPreference object
 
     async set_user_diet_preference(payload: DietPreference) -> DietPreference:
-        Sets or updates the diet preference for a given user in the Supabase database.
+        Saves the user's diet choices and allergies. Updates if they already exist,
+        creates new if not. Basically their "food rules" storage
         Parameters:
-            payload (DietPreference): An instance of DietPreference containing the user's diet preference data to be set or updated.
+            payload (DietPreference): Their new diet rules to save
         Returns:
-            DietPreference: An instance of DietPreference containing the updated user's diet preference data.
+            DietPreference: The saved diet rules as confirmation
     """
     def __init__(self, user_id: str):
         self.supabase: Client = create_client(supabase_url=os.environ.get("NEXT_PUBLIC_SUPABASE_URL"), supabase_key=os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY"))
