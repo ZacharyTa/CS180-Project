@@ -7,6 +7,9 @@
 2. Follow setup instructions in:
    - Frontend: [src/frontend/README.md](src/frontend/README.md)
    - Backend: [src/backend/README.md](src/backend/README.md)
+3. Create .env files in both frontend and backend directories
+   - Frontend: `src/frontend/.env`
+   - Backend: `src/backend/.env`
 
 ## Tech Stack
 
